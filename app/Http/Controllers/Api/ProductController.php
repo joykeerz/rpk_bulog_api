@@ -129,7 +129,7 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function createProduct(Request $request)
+    public function createCategory(Request $request)
     {
         $request->validate([
             'nama_kategori' => 'required',
@@ -155,24 +155,26 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function createCategory(Request $request)
+    public function createProduct(Request $request)
     {
         $request->validate([
-            'nama_produk' => 'required',
             'kategori_id' => 'required',
-            'harga' => 'required',
-            'stok' => 'required',
-            'deskripsi' => 'required',
-            'gambar' => 'required',
+            'kode_produk' => 'required',
+            'nama_produk' => 'required',
+            'desk_produk' => 'required',
+            'harga_produk' => 'required',
+            'diskon_produk' => 'required',
+            'satuan_unit_produk' => 'required',
         ]);
 
         $product = DB::table('produk')->insert([
-            'nama_produk' => $request->nama_produk,
             'kategori_id' => $request->kategori_id,
-            'harga' => $request->harga,
-            'stok' => $request->stok,
-            'deskripsi' => $request->deskripsi,
-            'gambar' => $request->gambar,
+            'kode_produk' => $request->kode_produk,
+            'nama_produk' => $request->nama_produk,
+            'desk_produk' => $request->desk_produk,
+            'harga_produk' => $request->harga_produk,
+            'diskon_produk' => $request->diskon_produk,
+            'satuan_unit_produk' => $request->satuan_unit_produk,
             'created_at' => now(),
             'updated_at' => now(),
         ]);

@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return response()->json([
-        "message" => "Welcome to RPK BULOG API",
-        "date" => now()->toDateTimeString()
-    ],200);
-});
+// Route::get('/', function () {
+//     return response()->json([
+//         "message" => "Welcome to RPK BULOG API",
+//         "date" => now()->toDateTimeString()
+//     ],200);
+// });

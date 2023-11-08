@@ -20,6 +20,13 @@ use App\Http\Controllers\Api\ProductController;
 //     return $request->user();
 // });
 
+Route::get('/check/connection', function () {
+    return response()->json([
+        'message' => "Connected",
+        "data" => now(),
+    ], 200);
+});
+
 Route::post('/register',[AuthController::class, 'register']);
 Route::post('/login',[AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
