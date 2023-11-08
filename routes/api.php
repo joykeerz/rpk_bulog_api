@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\ProductController;
 
 /*
@@ -48,5 +49,16 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [ProductController::class, 'getCategories']);
         Route::post('/search', [ProductController::class, 'searchCategory']);
         Route::post('/create', [ProductController::class, 'createCategory']);
+    });
+
+    Route::prefix('gudang')->group(function(){
+        Route::get('/', [GudangController::class, 'getAllGudang']);
+        Route::get('/{id}', [GudangController::class, 'getGudang']);
+    });
+
+    Route::prefix('stock')->group(function(){
+        Route::get('/', [StockController::class, 'getAllStocks']);
+        Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
+        Route::get('/produk/{id}', [StockController::class, 'getStockFromProduct']);
     });
 });

@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kategori;
+use App\Models\Produk;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -86,6 +88,12 @@ class ProductController extends Controller
 
     public function searchProduct(Request $request)
     {
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
         $search = $request->search;
 
         $products = DB::table('produk')
@@ -109,6 +117,12 @@ class ProductController extends Controller
 
     public function searchCategory(Request $request)
     {
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
         $search = $request->search;
 
         $categories = DB::table('kategori')
@@ -131,22 +145,34 @@ class ProductController extends Controller
 
     public function createCategory(Request $request)
     {
-        $request->validate([
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required',
             'deskripsi_kategori' => 'required',
         ]);
 
-        $category = DB::table('kategori')->insert([
+        $category = Kategori::create([
             'nama_kategori' => $request->nama_kategori,
             'deskripsi_kategori' => $request->deskripsi_kategori,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => [],
+                'message' => $validator->errors(),
+                'success' => false
+            ]);
+        }
 
         if (!$category) {
             return response()->json([
                 'error' => "failed to add new category"
-            ], '404');
+            ], 400);
         };
 
         return response()->json([
@@ -157,7 +183,13 @@ class ProductController extends Controller
 
     public function createProduct(Request $request)
     {
-        $request->validate([
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
             'kategori_id' => 'required',
             'kode_produk' => 'required',
             'nama_produk' => 'required',
@@ -167,7 +199,7 @@ class ProductController extends Controller
             'satuan_unit_produk' => 'required',
         ]);
 
-        $product = DB::table('produk')->insert([
+        $product = Produk::create([
             'kategori_id' => $request->kategori_id,
             'kode_produk' => $request->kode_produk,
             'nama_produk' => $request->nama_produk,
@@ -175,19 +207,35 @@ class ProductController extends Controller
             'harga_produk' => $request->harga_produk,
             'diskon_produk' => $request->diskon_produk,
             'satuan_unit_produk' => $request->satuan_unit_produk,
-            'created_at' => now(),
-            'updated_at' => now(),
         ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'data' => [],
+                'message' => $validator->errors(),
+                'success' => false
+            ]);
+        }
 
         if (!$product) {
             return response()->json([
                 'error' => "failed to add new product"
-            ], '404');
+            ], 400);
         };
 
         return response()->json([
             'message' => "success add new product",
             'data' => $product,
         ], 200);
+    }
+
+    private function requestChecker(Request $request)
+    {
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+        return $request;
     }
 }

@@ -15,6 +15,13 @@ class AuthController extends Controller
     //
     public function register(Request $request)
     {
+
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
@@ -43,31 +50,39 @@ class AuthController extends Controller
         ]);
     }
 
-    public function login(Request $request){
-        $validator = Validator::make($request->all(),[
+    public function login(Request $request)
+    {
+
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
             'email' => 'required|email',
             'password' => 'required|string|min:8'
         ]);
 
-        if($validator->fails()){
-            return response()->json($validator->errors()->toJson(),400);
+        if ($validator->fails()) {
+            return response()->json($validator->errors()->toJson(), 400);
         }
 
-        if(!Auth::attempt($request->only('email','password'))){
+        if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Unauthorized'
             ]);
         }
 
-        if(!Auth::attempt($validator->validated())){
+        if (!Auth::attempt($validator->validated())) {
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Unauthorized'
             ]);
         }
 
-        $user = User::where('email',$request->email)->firstOrFail();
+        $user = User::where('email', $request->email)->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -78,7 +93,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function logout(){
+    public function logout()
+    {
         Auth::user()->tokens()->delete();
         return response()->json([
             'status_code' => 200,
@@ -86,7 +102,8 @@ class AuthController extends Controller
         ]);
     }
 
-    public function getCurrentUser(){
+    public function getCurrentUser()
+    {
         return response()->json([
             'status_code' => 200,
             'user' => Auth::user()
