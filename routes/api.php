@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Api\StockController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,8 +29,8 @@ Route::get('/check/connection', function () {
     ], 200);
 });
 
-Route::post('/register',[AuthController::class, 'register']);
-Route::post('/login',[AuthController::class, 'login']);
+Route::post('/register', [AuthController::class, 'register']);
+Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::post('/user', [AuthController::class, 'getCurrentUser']);
@@ -51,14 +52,18 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [ProductController::class, 'createCategory']);
     });
 
-    Route::prefix('gudang')->group(function(){
+    Route::prefix('gudang')->group(function () {
         Route::get('/', [GudangController::class, 'getAllGudang']);
         Route::get('/{id}', [GudangController::class, 'getGudang']);
     });
 
-    Route::prefix('stock')->group(function(){
+    Route::prefix('stock')->group(function () {
         Route::get('/', [StockController::class, 'getAllStocks']);
         Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
-        Route::get('/produk/{id}', [StockController::class, 'getStockFromProduct']);
+        Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
+    });
+
+    Route::prefix('pesanan')->group(function () {
+
     });
 });

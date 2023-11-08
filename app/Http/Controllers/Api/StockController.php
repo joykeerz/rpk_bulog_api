@@ -18,7 +18,7 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->select('stok.*', 'produk.*', 'gudang.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'stok.created_at as cat')
             ->orderBy('cat', 'desc')
-            // ->paginate(10);
+            // ->simplePaginate(1);
             ->get();
 
         if (empty($stocks)) {
