@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DetailPesanan;
 use App\Models\Pesanan;
+use App\Models\Stok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -54,7 +55,6 @@ class PesananController extends Controller
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'alamat_id' => 'required',
-            'status_pemesanan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -89,25 +89,26 @@ class PesananController extends Controller
             ], 400);
         }
 
-        $validator = Validator::make($request->all(), [
-            'pesanan_id' => 'required',
-            'produk_id' => 'required',
-            'qty' => 'required',
-            'harga' => 'required',
-        ]);
+        $value = $request->produk;
+        $listTest = [];
+        $total = 0;
 
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()
-            ], 400);
+        for ($i = 0; $i < count($value); $i++) {
+            array_push($listTest, [
+                'pesanan_id' => $id,
+                'produk_id' => $value[$i]['produk_id'],
+                'qty' => $value[$i]['qty'],
+                'harga' => $value[$i]['harga'],
+            ]);
+
+            $currentStock = Stok::find($value[$i]['stok_id']);
+            if($currentStock->jumlah_stok > 0){
+                $currentStock->decrement('jumlah_stok', $value[$i]['qty']);
+            }
+            $currentStock->save();
+            $total += $value[$i]['harga'];
         }
-
-        $detailPesanan = DetailPesanan::create([
-            'pesanan_id' => $id,
-            'produk_id' => $request->produk_id,
-            'qty' => $request->qty,
-            'harga' => $request->harga,
-        ]);
+        $detailPesanan = DB::table('detail_pesanan')->insert($listTest);
 
         if (!$detailPesanan) {
             return response()->json([

@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\GudangController;
+use App\Http\Controllers\Api\PesananController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockController;
 
@@ -33,7 +34,7 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::middleware('auth:sanctum')->group(function () {
     ///account Route
-    Route::post('/user', [AuthController::class, 'getCurrentUser']);
+    Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
     ///Product Routes
@@ -64,6 +65,8 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('pesanan')->group(function () {
-
+        Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
+        Route::post('/create', [PesananController::class, 'createPesanan']);
+        Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
     });
 });
