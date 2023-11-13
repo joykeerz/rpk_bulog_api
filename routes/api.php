@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\PesananController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockController;
+use App\Http\Controllers\Api\TransaksiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,20 +54,31 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [ProductController::class, 'createCategory']);
     });
 
+    ///gudang Routes
     Route::prefix('gudang')->group(function () {
         Route::get('/', [GudangController::class, 'getAllGudang']);
         Route::get('/{id}', [GudangController::class, 'getGudang']);
     });
 
+    ///Stock Routes
     Route::prefix('stock')->group(function () {
         Route::get('/', [StockController::class, 'getAllStocks']);
         Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
         Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
     });
 
+    ///Pesanan Routes
     Route::prefix('pesanan')->group(function () {
         Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
         Route::post('/create', [PesananController::class, 'createPesanan']);
         Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
+        Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
+    });
+
+    ///transaksi Routes
+    Route::prefix('transaksi')->group(function () {
+        Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
+        Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
+        Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
     });
 });

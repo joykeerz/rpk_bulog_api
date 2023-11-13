@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('user_id');
             $table->unsignedInteger('alamat_id')->default(1);
-            $table->string('nama_rpk');
-            $table->string('no_ktp');
+            $table->string('kode_customer')->nullable();
+            $table->string('nama_rpk')->default('none');
+            $table->string('no_ktp')->default('none');
             $table->binary('ktp_img')->nullable();
             $table->timestamps();
         });

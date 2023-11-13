@@ -24,7 +24,7 @@ class PesananController extends Controller
 
         $detailPesanan = DB::table('detail_pesanan')
             ->join('produk', 'detail_pesanan.produk_id', '=', 'produk.id')
-            ->select('detail_pesanan.*', 'produk.*', 'detail_pesanan.id as did', 'produk.id as pid', 'detail_pesanan.created_at as cat')
+            ->select('detail_pesanan.*', 'produk.*', 'detail_pesanan.id as did', 'produk.id as prid', 'detail_pesanan.created_at as cat')
             ->where('detail_pesanan.pesanan_id', '=', $pesanan->pid)
             ->orderBy('cat', 'desc')
             ->get();
@@ -55,6 +55,7 @@ class PesananController extends Controller
         $validator = Validator::make($request->all(), [
             'user_id' => 'required',
             'alamat_id' => 'required',
+            'kurir_id' =>   'required',
         ]);
 
         if ($validator->fails()) {
@@ -66,6 +67,7 @@ class PesananController extends Controller
         $pesanan = Pesanan::create([
             'user_id' => $request->user_id,
             'alamat_id' => $request->alamat_id,
+            'kurir_id' => $request->kurir_id,
             'status_pemesanan' => 'pesanan belum dikonfirmasi',
         ]);
 
@@ -89,13 +91,13 @@ class PesananController extends Controller
             ], 400);
         }
 
-        $value = $request->produk;
-        $listTest = [];
+        $inputProduct = $request->produk;
+        $listProduct = [];
         $total = 0;
 
-        for ($i = 0; $i < count($value); $i++) {
+        for ($i = 0; $i < count($inputProduct); $i++) {
 
-            $validator = Validator::make($value[$i], [
+            $validator = Validator::make($inputProduct[$i], [
                 'produk_id' => 'required',
                 'qty' => 'required',
                 'harga' => 'required',
@@ -108,22 +110,25 @@ class PesananController extends Controller
                 ], 400);
             }
 
-            array_push($listTest, [
+            array_push($listProduct, [
                 'pesanan_id' => $id,
-                'produk_id' => $value[$i]['produk_id'],
-                'qty' => $value[$i]['qty'],
-                'harga' => $value[$i]['harga'],
+                'produk_id' => $inputProduct[$i]['produk_id'],
+                'qty' => $inputProduct[$i]['qty'],
+                'harga' => $inputProduct[$i]['harga'],
             ]);
 
-            $currentStock = Stok::find($value[$i]['stok_id']);
-            if ($currentStock->jumlah_stok > 0) {
-                $currentStock->decrement('jumlah_stok', $value[$i]['qty']);
+            $currentStock = Stok::find($inputProduct[$i]['stok_id']);
+            if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $inputProduct[$i]['qty']) {
+                return response()->json([
+                    'error' => "Stok id $currentStock->produk_id tidak mencukupi"
+                ], 400);
             }
+            $currentStock->decrement('jumlah_stok', $inputProduct[$i]['qty']);
             $currentStock->save();
-            $total += $value[$i]['harga'];
+            $total += $inputProduct[$i]['harga'];
         }
 
-        $detailPesanan = DB::table('detail_pesanan')->insert($listTest);
+        $detailPesanan = DB::table('detail_pesanan')->insert($listProduct);
 
         if (!$detailPesanan) {
             return response()->json([
@@ -137,126 +142,5 @@ class PesananController extends Controller
         ], 201);
     }
 
-    public function createTransaksi(Request $request, $id)
-    {
-        if (!$request->input()) {
-            return response()->json([
-                'error' => "please fill data"
-            ], 400);
-        }
 
-        $validator = Validator::make($request->all(), [
-            'pesanan_id' => 'required',
-            'tipe_pembayaran' => 'required',
-            'status_pembayaran' => 'required',
-            'diskon' => 'required',
-            'subtotal_produk' => 'required',
-            'subtotal_pengiriman' => 'required',
-
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()
-            ], 400);
-        }
-
-        $transaksi = new Transaksi;
-        $transaksi->pesanan_id = $id;
-        $transaksi->tipe_pembayaran = $request->tipe_pembayaran;
-        $transaksi->status_pembayaran = $request->status_pembayaran;
-        $transaksi->diskon = $request->diskon;
-        $transaksi->subtotal_produk = $request->subtotal_produk;
-        $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
-        $transaksi->save();
-
-        if (!$transaksi) {
-            return response()->json([
-                'error' => 'failed to create transaksi'
-            ], 500);
-        }
-
-        return response()->json([
-            'message' => 'Transaksi berhasil dibuat',
-            'data' => $transaksi
-        ], 201);
-    }
-
-    public function getTransaksi($id)
-    {
-        $transaksi = DB::table('transaksi')
-            ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
-            ->select('transaksi.*', 'pesanan.*', 'transaksi.id as tid', 'pesanan.id as pid')
-            ->where('transaksi.id', '=', $id)
-            ->first();
-
-        if (empty($transaksi)) {
-            return response()->json([
-                'error' => 'Transaksi not found'
-            ], '404');
-        };
-
-        return response()->json([
-            'data' => $transaksi,
-        ], 200);
-    }
-
-    public function getDetailTransaksi($id)
-    {
-        $transaksi = DB::table('transaksi')
-            ->join('pesanan', 'pesanan.id', '=', 'transaksi.pesanan_id')
-            ->join('users', 'users.id', '=', 'pesanan.user_id')
-            ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
-            ->join('kurir', 'kurir.id', '=', 'pesanan.kurir_id')
-            ->where('transaksi.id', '=', $id)
-            ->select('transaksi.*', 'pesanan.*', 'users.*', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid')
-            ->first();
-
-        $detailPesanan = DB::table('detail_pesanan')
-            ->join('produk', 'produk.id', '=', 'detail_pesanan.produk_id')
-            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-            ->where('pesanan.id', '=', $transaksi->pesanan_id)
-            ->select('detail_pesanan.*', 'produk.*', 'detail_pesanan.id as did', 'produk.id as prid')
-            ->get();
-
-        if (empty($transaksi)) {
-            return response()->json([
-                'error' => 'Transaksi not found'
-            ], '404');
-        };
-
-        if (empty($detailPesanan)) {
-            return response()->json([
-                'error' => 'Detail Pesanan not found'
-            ], '404');
-        };
-
-        return response()->json([
-            'data' => [
-                $transaksi,
-                $detailPesanan
-            ],
-        ], 200);
-    }
-
-    public function getTransaksiListByUser($id)
-    {
-        $transaksi = DB::table('transaksi')
-            ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
-            ->join('users', 'pesanan.user_id', '=', 'users.id')
-            ->select('transaksi.*', 'pesanan.*', 'users.*', 'transaksi.id as tid', 'pesanan.id as pid','users.id as uid', 'transaksi.created_at as cat')
-            ->orderBy('cat', 'desc')
-            ->where('pesanan.user_id', '=', $id)
-            ->get();
-
-        if (empty($transaksi)) {
-            return response()->json([
-                'error' => 'Transaksi not found'
-            ], '404');
-        };
-
-        return response()->json([
-            'data' => $transaksi,
-        ], 200);
-    }
 }
