@@ -112,6 +112,7 @@ class TransaksiController extends Controller
 
     public function getTransaksiListByUser($id)
     {
+
         $transaksi = DB::table('transaksi')
             ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
             ->join('users', 'pesanan.user_id', '=', 'users.id')
