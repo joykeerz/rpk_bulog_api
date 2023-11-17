@@ -61,7 +61,7 @@ class AuthController extends Controller
 
         $alamat = Alamat::create([
             'jalan' => $request->jalan,
-            'jalan_ext' => $request->jalant_ext,
+            'jalan_ext' => $request->jalan_ext,
             'blok' => $request->blok,
             'rt' => $request->rt,
             'rw' => $request->rw,
