@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
-
+});
     ///Product Routes
     Route::prefix('products')->group(function () {
         Route::get('/', [ProductController::class, 'getProducts']);
@@ -81,4 +81,4 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
         Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
     });
-});
+
