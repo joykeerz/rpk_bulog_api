@@ -124,4 +124,68 @@ class StockController extends Controller
             'data' => $stock,
         ], 200);
     }
+
+    public function searchStockByProductName(Request $request){
+        $validator = Validator::make($request->all(), [
+            'nama_produk' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $stocks = DB::table('stok')
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('produk.nama_produk', 'like', '%'.$request->nama_produk.'%')
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->get();
+
+        if (empty($stocks)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stocks,
+        ], 200);
+    }
+
+    public function searchStockByCategoryName(Request $request){
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $stocks = DB::table('stok')
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('kategori.nama_kategori', 'like', '%'.$request->nama_kategori.'%')
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->get();
+
+        if (empty($stocks)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stocks,
+        ], 200);
+    }
 }
