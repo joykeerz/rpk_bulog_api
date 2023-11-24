@@ -67,6 +67,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
         Route::get('/category/{id}', [StockController::class, 'getStocksByCategory']);
         Route::get('/{id}', [StockController::class, 'getSingleStock']);
+        Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
+        Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
     });
 
     ///Pesanan Routes
