@@ -16,7 +16,8 @@ class StockController extends Controller
         $stocks = DB::table('stok')
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'stok.created_at as cat')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->orderBy('cat', 'desc')
             // ->simplePaginate(1);
             ->get();
@@ -32,15 +33,17 @@ class StockController extends Controller
         ], 200);
     }
 
-    public function getStockFromGudang($id){
+    public function getStocksByCategory($id)
+    {
         $stocks = DB::table('stok')
-        ->join('produk', 'stok.produk_id', '=', 'produk.id')
-        ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
-        ->select('stok.*', 'produk.*', 'gudang.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'stok.created_at as cat')
-        ->where('gudang.id', '=', $id)
-        ->orderBy('cat', 'desc')
-        // ->paginate(10);
-        ->get();
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('produk.kategori_id', '=', $id)
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->get();
 
         if (empty($stocks)) {
             return response()->json([
@@ -53,15 +56,17 @@ class StockController extends Controller
         ], 200);
     }
 
-    public function getStockFromProduct($id){
+    public function getStockFromGudang($id)
+    {
         $stocks = DB::table('stok')
-        ->join('produk', 'stok.produk_id', '=', 'produk.id')
-        ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
-        ->select('stok.*', 'produk.*', 'gudang.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'stok.created_at as cat')
-        ->where('produk.id', '=', $id)
-        ->orderBy('cat', 'desc')
-        // ->paginate(10);
-        ->get();
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('gudang.id', '=', $id)
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->get();
 
         if (empty($stocks)) {
             return response()->json([
@@ -71,6 +76,52 @@ class StockController extends Controller
 
         return response()->json([
             'data' => $stocks,
+        ], 200);
+    }
+
+    public function getStockFromProduct($id)
+    {
+        $stocks = DB::table('stok')
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('produk.id', '=', $id)
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->get();
+
+        if (empty($stocks)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stocks,
+        ], 200);
+    }
+
+    public function getSingleStock($id)
+    {
+        $stock = DB::table('stok')
+            ->join('produk', 'stok.produk_id', '=', 'produk.id')
+            ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
+            ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->where('stok.id', '=', $id)
+            ->orderBy('cat', 'desc')
+            // ->paginate(10);
+            ->first();
+
+        if (empty($stock)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stock,
         ], 200);
     }
 }
