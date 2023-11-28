@@ -50,8 +50,8 @@ class AuthController extends Controller
 
         $filePath = 'none';
         if ($request->hasFile('ktp_img')) {
-            $filePath = $request->file('tb_img_ktp')->store('images/ktp', 'public');
-            $validatedData['tb_img_ktp'] = $filePath;
+            $filePath = $request->file('ktp_img')->store('images/ktp', 'public');
+            $validatedData['ktp_img'] = $filePath;
         }
 
         $user = User::create([
