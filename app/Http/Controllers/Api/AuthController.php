@@ -40,10 +40,18 @@ class AuthController extends Controller
             'kode_pos' => 'required|string|max:255',
             'nama_rpk' => 'required|string|max:255',
             'no_ktp' => 'required|string|max:255',
+            'kode_customer' => 'required|string|max:255',
+            'ktp_img' => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ]);
 
         if ($validator->fails()) {
             return response()->json($validator->errors()->toJson(), 400);
+        }
+
+        $filePath = 'none';
+        if ($request->hasFile('ktp_img')) {
+            $filePath = $request->file('tb_img_ktp')->store('images/ktp', 'public');
+            $validatedData['tb_img_ktp'] = $filePath;
         }
 
         $user = User::create([
@@ -51,6 +59,7 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'no_hp' => $request->no_hp,
+            'role_id' => 5,
         ]);
 
         if (!$user) {
@@ -84,6 +93,8 @@ class AuthController extends Controller
             'alamat_id' => $alamat->id,
             'nama_rpk' => $request->nama_rpk,
             'no_ktp' => $request->no_ktp,
+            'kode_customer' => $request->kode_customer,
+            'ktp_img' => $filePath,
         ]);
 
         if (!$biodata) {
