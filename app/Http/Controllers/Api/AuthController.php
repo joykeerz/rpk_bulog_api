@@ -31,7 +31,7 @@ class AuthController extends Controller
             'password' => 'required|string|min:8',
             'no_hp' => 'required|string|max:15|unique:users,no_hp',
             'jalan' => 'required|string|max:255',
-            'jalant_ext' => 'required|string|max:255',
+            'jalan_ext' => 'required|string|max:255',
             'blok' => 'required|string|max:255',
             'rt' => 'required|string|max:255',
             'rw' => 'required|string|max:255',
