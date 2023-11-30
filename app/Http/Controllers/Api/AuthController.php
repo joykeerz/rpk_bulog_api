@@ -42,6 +42,32 @@ class AuthController extends Controller
             'no_ktp' => 'required|string|max:255',
             'kode_customer' => 'required|string|max:255',
             'ktp_img' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+        ],[
+            'name.required' => 'Nama harus diisi',
+            'email.required' => 'Email harus diisi',
+            'email.unique' => 'Email sudah terdaftar',
+            'password.required' => 'Password harus diisi',
+            'no_hp.required' => 'No HP harus diisi',
+            'no_hp.unique' => 'No HP sudah terdaftar',
+            'jalan.required' => 'Jalan harus diisi',
+            'jalan_ext.required' => 'Jalan Ext harus diisi',
+            'blok.required' => 'Blok harus diisi',
+            'rt.required' => 'RT harus diisi',
+            'rw.required' => 'RW harus diisi',
+            'provinsi.required' => 'Provinsi harus diisi',
+            'kota_kabupaten.required' => 'Kota/Kabupaten harus diisi',
+            'kecamatan.required' => 'Kecamatan harus diisi',
+            'kelurahan.required' => 'Kelurahan harus diisi',
+            'negara.required' => 'Negara harus diisi',
+            'kode_pos.required' => 'Kode Pos harus diisi',
+            'nama_rpk.required' => 'Nama RPK harus diisi',
+            'no_ktp.required' => 'No KTP harus diisi',
+            'kode_customer.required' => 'Kode Customer harus diisi',
+            'ktp_img.required' => 'KTP harus diisi',
+            'ktp_img.image' => 'KTP harus berupa gambar',
+            'ktp_img.mimes' => 'KTP harus berformat jpg, jpeg atau png',
+            'ktp_img.max' => 'KTP maksimal 10MB',
+
         ]);
 
         if ($validator->fails()) {
