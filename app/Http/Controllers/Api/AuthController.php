@@ -41,7 +41,7 @@ class AuthController extends Controller
             'nama_rpk' => 'required|string|max:255',
             'no_ktp' => 'required|string|max:255',
             'kode_customer' => 'required|string|max:255',
-            'ktp_img' => 'required|image|mimes:jpeg,png,jpg|max:10000',
+            // 'ktp_img' => 'required|image|mimes:jpeg,png,jpg|max:10000',
         ],[
             'name.required' => 'Nama harus diisi',
             'email.required' => 'Email harus diisi',
@@ -63,10 +63,10 @@ class AuthController extends Controller
             'nama_rpk.required' => 'Nama RPK harus diisi',
             'no_ktp.required' => 'No KTP harus diisi',
             'kode_customer.required' => 'Kode Customer harus diisi',
-            'ktp_img.required' => 'KTP harus diisi',
-            'ktp_img.image' => 'KTP harus berupa gambar',
-            'ktp_img.mimes' => 'KTP harus berformat jpg, jpeg atau png',
-            'ktp_img.max' => 'KTP maksimal 10MB',
+            // 'ktp_img.required' => 'KTP harus diisi',
+            // 'ktp_img.image' => 'KTP harus berupa gambar',
+            // 'ktp_img.mimes' => 'KTP harus berformat jpg, jpeg atau png',
+            // 'ktp_img.max' => 'KTP maksimal 10MB',
 
         ]);
 
