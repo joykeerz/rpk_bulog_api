@@ -16,7 +16,7 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         return response()->json([
-            'message' => "wkwkwkwk"
+            'message' => $request->input(),
         ], 200);
 
         if (!$request->input()) {
