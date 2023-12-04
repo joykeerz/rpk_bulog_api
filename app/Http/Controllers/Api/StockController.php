@@ -17,7 +17,8 @@ class StockController extends Controller
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
+            ->select('satuan_unit.simbol_satuan', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->orderBy('cat', 'desc')
             // ->simplePaginate(1);
             ->get();
@@ -39,7 +40,8 @@ class StockController extends Controller
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
+            ->select('satuan_unit.simbol_satuan', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('produk.kategori_id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -62,7 +64,8 @@ class StockController extends Controller
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'satuan_unit.simbol_satuan', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('gudang.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -85,7 +88,8 @@ class StockController extends Controller
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
+            ->select('satuan_unit.simbol_satuan', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('produk.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -108,7 +112,8 @@ class StockController extends Controller
             ->join('produk', 'stok.produk_id', '=', 'produk.id')
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
+            ->select('satuan_unit.simbol_satuan', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('stok.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -125,7 +130,8 @@ class StockController extends Controller
         ], 200);
     }
 
-    public function searchStockByProductName(Request $request){
+    public function searchStockByProductName(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'nama_produk' => 'required|string',
         ]);
@@ -141,7 +147,7 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
-            ->where('produk.nama_produk', 'like', '%'.$request->nama_produk.'%')
+            ->where('produk.nama_produk', 'like', '%' . $request->nama_produk . '%')
             ->orderBy('cat', 'desc')
             // ->paginate(10);
             ->get();
@@ -157,7 +163,8 @@ class StockController extends Controller
         ], 200);
     }
 
-    public function searchStockByCategoryName(Request $request){
+    public function searchStockByCategoryName(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string',
         ]);
@@ -173,7 +180,7 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
-            ->where('kategori.nama_kategori', 'like', '%'.$request->nama_kategori.'%')
+            ->where('kategori.nama_kategori', 'like', '%' . $request->nama_kategori . '%')
             ->orderBy('cat', 'desc')
             // ->paginate(10);
             ->get();
