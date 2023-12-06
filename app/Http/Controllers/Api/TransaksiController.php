@@ -129,8 +129,29 @@ class TransaksiController extends Controller
         $detailPesanan = DB::table('detail_pesanan')
             ->join('produk', 'produk.id', '=', 'detail_pesanan.produk_id')
             ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('kategori', 'kategori.id', '=', 'produk.kategori_id')
+            ->join('satuan_unit', 'satuan_unit.id', '=', 'produk.satuan_unit_id')
             ->where('pesanan.id', '=', $transaksi->pesanan_id)
-            ->select('detail_pesanan.*', 'produk.*', 'detail_pesanan.id as did', 'produk.id as prid')
+            ->select(
+                'detail_pesanan.id as did',
+                'detail_pesanan.pesanan_id',
+                'detail_pesanan.produk_id',
+                'detail_pesanan.qty',
+                'detail_pesanan.harga',
+                'detail_pesanan.dpp',
+                'detail_pesanan.ppn',
+                'detail_pesanan.jenis_pajak',
+                'detail_pesanan.persentase_pajak',
+                'detail_pesanan.subtotal_detail',
+                'produk.kategori_id',
+                'produk.pajak_id',
+                'produk.satuan_unit_id',
+                'produk.kode_produk',
+                'produk.nama_produk',
+                'produk.desk_produk',
+                'produk.diskon_produk',
+                'produk.produk_file_path',
+            )
             ->get();
 
         if (empty($transaksi)) {
