@@ -66,6 +66,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
         Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
         Route::get('/category/{id}', [StockController::class, 'getStocksByCategory']);
+        Route::get('/category/{cid}/gudang/{gid}', [StockController::class, 'getStocksByCategoryAndGudang']);
         Route::get('/{id}', [StockController::class, 'getSingleStock']);
         Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
         Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
