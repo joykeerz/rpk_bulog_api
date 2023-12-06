@@ -12,6 +12,7 @@ class TransaksiController extends Controller
 {
     public function createTransaksi(Request $request, $id)
     {
+        // return $request->all();
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
