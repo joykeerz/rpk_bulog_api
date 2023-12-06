@@ -125,7 +125,6 @@ class TransaksiController extends Controller
             ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
             ->join('users', 'pesanan.user_id', '=', 'users.id')
             ->select(
-                'transaksi.id',
                 'transaksi.pesanan_id',
                 'transaksi.tipe_pembayaran',
                 'transaksi.status_pembayaran',
@@ -134,8 +133,6 @@ class TransaksiController extends Controller
                 'transaksi.subtotal_pengiriman',
                 'transaksi.total_qty',
                 'transaksi.total_pembayaran',
-                'transaksi.created_at',
-                'transaksi.updated_at',
                 'transaksi.kode_transaksi',
                 'transaksi.total_dpp',
                 'transaksi.total_ppn',
@@ -143,13 +140,10 @@ class TransaksiController extends Controller
                 'transaksi.ppn_terutang',
                 'transaksi.dpp_dibebaskan',
                 'transaksi.ppn_dibebaskan',
-                'pesanan.id',
                 'pesanan.user_id',
                 'pesanan.alamat_id',
                 'pesanan.kurir_id',
                 'pesanan.status_pemesanan',
-                'pesanan.created_at',
-                'pesanan.updated_at',
                 'pesanan.gudang_id',
                 'users.name',
                 'transaksi.id as tid',
