@@ -12,11 +12,11 @@ class TransaksiController extends Controller
 {
     public function createTransaksi(Request $request, $id)
     {
-        if (!$request->input()) {
-            return response()->json([
-                'error' => "please fill data"
-            ], 400);
-        }
+        // if (!$request->input()) {
+        //     return response()->json([
+        //         'error' => "please fill data"
+        //     ], 400);
+        // }
 
         $validator = Validator::make($request->all(), [
             'tipe_pembayaran' => 'required',
