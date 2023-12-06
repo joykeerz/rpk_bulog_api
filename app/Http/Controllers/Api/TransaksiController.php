@@ -21,10 +21,16 @@ class TransaksiController extends Controller
         $validator = Validator::make($request->all(), [
             'tipe_pembayaran' => 'required',
             'status_pembayaran' => 'required',
-            'diskon' => 'required',
             'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
-            'tota_qty' => 'required',
+            'total_qty' => 'required',
+            'total_pembayaran' => 'required',
+            'total_dpp' => 'required',
+            'total_ppn' => 'required',
+            'dpp_terutang' => 'required',
+            'ppn_terutang' => 'required',
+            'dpp_dibebaskan' => 'required',
+            'ppn_dibebaskan' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -37,9 +43,10 @@ class TransaksiController extends Controller
         $transaksi->pesanan_id = $id;
         $transaksi->tipe_pembayaran = $request->tipe_pembayaran;
         $transaksi->status_pembayaran = $request->status_pembayaran;
-        $transaksi->diskon = $request->diskon;
+        $transaksi->diskon = 0;
         $transaksi->subtotal_produk = $request->subtotal_produk;
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
+        $transaksi->total_qty = $request->total_qty;
         $transaksi->save();
 
         if (!$transaksi) {
@@ -81,7 +88,7 @@ class TransaksiController extends Controller
             ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
             ->join('kurir', 'kurir.id', '=', 'pesanan.kurir_id')
             ->where('transaksi.id', '=', $id)
-            ->select('transaksi.*', 'pesanan.*', 'users.name', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid')
+            ->select('transaksi.*', 'pesanan.*', 'users.name', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid', 'transaksi.created_at as cat')
             ->first();
 
         $detailPesanan = DB::table('detail_pesanan')
