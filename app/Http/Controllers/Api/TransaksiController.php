@@ -80,7 +80,7 @@ class TransaksiController extends Controller
             ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
             ->join('kurir', 'kurir.id', '=', 'pesanan.kurir_id')
             ->where('transaksi.id', '=', $id)
-            ->select('transaksi.*', 'pesanan.*', 'users.*', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid')
+            ->select('transaksi.*', 'pesanan.*', 'users.name', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid')
             ->first();
 
         $detailPesanan = DB::table('detail_pesanan')
@@ -116,7 +116,7 @@ class TransaksiController extends Controller
         $transaksi = DB::table('transaksi')
             ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
             ->join('users', 'pesanan.user_id', '=', 'users.id')
-            ->select('transaksi.*', 'pesanan.*', 'users.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'transaksi.created_at as cat')
+            ->select('transaksi.*', 'pesanan.*', 'users.name', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'transaksi.created_at as cat')
             ->orderBy('cat', 'desc')
             ->where('pesanan.user_id', '=', $id)
             ->get();
