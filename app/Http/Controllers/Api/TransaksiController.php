@@ -30,6 +30,20 @@ class TransaksiController extends Controller
             'ppn_terutang' => 'required',
             'dpp_dibebaskan' => 'required',
             'ppn_dibebaskan' => 'required',
+            'kode_company' => 'required',
+        ],[
+            'tipe_pembayaran.required' => 'Tipe Pembayaran tidak boleh kosong',
+            'status_pembayaran.required' => 'Status Pembayaran tidak boleh kosong',
+            'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
+            'subtotal_pengiriman.required' => 'Subtotal Pengiriman tidak boleh kosong',
+            'total_qty.required' => 'Total Qty tidak boleh kosong',
+            'total_dpp.required' => 'Total DPP tidak boleh kosong',
+            'total_ppn.required' => 'Total PPN tidak boleh kosong',
+            'dpp_terutang.required' => 'DPP Terutang tidak boleh kosong',
+            'ppn_terutang.required' => 'PPN Terutang tidak boleh kosong',
+            'dpp_dibebaskan.required' => 'DPP Dibebaskan tidak boleh kosong',
+            'ppn_dibebaskan.required' => 'PPN Dibebaskan tidak boleh kosong',
+            'kode_company.required' => 'Kode Company tidak boleh kosong',
         ]);
 
         if ($validator->fails()) {
@@ -47,7 +61,7 @@ class TransaksiController extends Controller
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
         $transaksi->total_qty = $request->total_qty;
         $transaksi->total_pembayaran = $request->subtotal_produk + $request->subtotal_pengiriman;
-        $transaksi->kode_transaksi = 'ORD/' . $id . '/' . now()->format('m') . '/' . now()->format('Y') . '/' . $request->data['userData'][4];
+        $transaksi->kode_transaksi = 'ORD/' . $id . '/' . now()->format('m') . '/' . now()->format('Y') . '/' . $request->kode_company;
         $transaksi->total_dpp = $request->total_dpp;
         $transaksi->total_ppn = $request->total_ppn;
         $transaksi->dpp_terutang = $request->dpp_terutang;
