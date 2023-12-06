@@ -24,7 +24,6 @@ class TransaksiController extends Controller
             'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
             'total_qty' => 'required',
-            'total_pembayaran' => 'required',
             'total_dpp' => 'required',
             'total_ppn' => 'required',
             'dpp_terutang' => 'required',
@@ -47,6 +46,7 @@ class TransaksiController extends Controller
         $transaksi->subtotal_produk = $request->subtotal_produk;
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
         $transaksi->total_qty = $request->total_qty;
+        $transaksi->total_pembayaran = $request->total_pembayaran;
         $transaksi->save();
 
         if (!$transaksi) {
@@ -88,7 +88,42 @@ class TransaksiController extends Controller
             ->join('alamat', 'alamat.id', '=', 'pesanan.alamat_id')
             ->join('kurir', 'kurir.id', '=', 'pesanan.kurir_id')
             ->where('transaksi.id', '=', $id)
-            ->select('transaksi.*', 'pesanan.*', 'users.name', 'alamat.*', 'kurir.*', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'alamat.id as aid', 'kurir.id as kid', 'transaksi.created_at as cat')
+            ->select(
+                'transaksi.pesanan_id',
+                'transaksi.id as tid',
+                'transaksi.tipe_pembayaran',
+                'transaksi.status_pembayaran',
+                'transaksi.diskon',
+                'transaksi.subtotal_produk',
+                'transaksi.subtotal_pengiriman',
+                'transaksi.total_qty',
+                'transaksi.total_pembayaran',
+                'transaksi.kode_transaksi',
+                'transaksi.total_dpp',
+                'transaksi.total_ppn',
+                'transaksi.dpp_terutang',
+                'transaksi.ppn_terutang',
+                'transaksi.dpp_dibebaskan',
+                'transaksi.ppn_dibebaskan',
+                'pesanan.user_id',
+                'pesanan.alamat_id',
+                'pesanan.kurir_id',
+                'pesanan.gudang_id',
+                'pesanan.status_pemesanan',
+                'users.name',
+                'alamat.jalan',
+                'alamat.jalan_ext',
+                'alamat.blok',
+                'alamat.rt',
+                'alamat.rw',
+                'alamat.provinsi',
+                'alamat.kota_kabupaten',
+                'alamat.kecamatan',
+                'alamat.kelurahan',
+                'alamat.kode_pos',
+                'kurir.nama_kurir',
+                'transaksi.created_at as cat'
+            )
             ->first();
 
         $detailPesanan = DB::table('detail_pesanan')
