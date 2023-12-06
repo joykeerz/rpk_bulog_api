@@ -133,7 +133,7 @@ class TransaksiController extends Controller
             ->join('satuan_unit', 'satuan_unit.id', '=', 'produk.satuan_unit_id')
             ->where('pesanan.id', '=', $transaksi->pesanan_id)
             ->select(
-                'detail_pesanan.id as did',
+                'detail_pesanan.id as detail_pesanan_id',
                 'detail_pesanan.pesanan_id',
                 'detail_pesanan.produk_id',
                 'detail_pesanan.qty',
