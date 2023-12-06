@@ -10,4 +10,5 @@ class Biodata extends Model
     use HasFactory;
     protected $table = 'biodata';
     protected $guarded = ['id'];
+
 }

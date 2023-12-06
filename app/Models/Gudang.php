@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Gudang extends Model
 {
     use HasFactory;
-    protected $table = 'gudang';
+
+    protected $table  = 'gudang';
     protected $guarded = ['id'];
 }
