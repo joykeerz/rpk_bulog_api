@@ -46,7 +46,14 @@ class TransaksiController extends Controller
         $transaksi->subtotal_produk = $request->subtotal_produk;
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
         $transaksi->total_qty = $request->total_qty;
-        $transaksi->total_pembayaran = $request->total_pembayaran;
+        $transaksi->total_pembayaran = $request->subtotal_produk + $request->subtotal_pengiriman;
+        $transaksi->kode_transaksi = 'ORD/' . $id . '/' . now()->format('m') . '/' . now()->format('Y') . '/' . $request->data['userData'][4];
+        $transaksi->total_dpp = $request->total_dpp;
+        $transaksi->total_ppn = $request->total_ppn;
+        $transaksi->dpp_terutang = $request->dpp_terutang;
+        $transaksi->ppn_terutang = $request->ppn_terutang;
+        $transaksi->dpp_dibebaskan = $request->dpp_dibebaskan;
+        $transaksi->ppn_dibebaskan = $request->ppn_dibebaskan;
         $transaksi->save();
 
         if (!$transaksi) {
