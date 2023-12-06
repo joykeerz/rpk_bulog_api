@@ -104,8 +104,8 @@ class TransaksiController extends Controller
 
         return response()->json([
             'data' => [
-                $transaksi,
-                $detailPesanan
+                'transaksi' => $transaksi,
+                'detail_pesanan' => $detailPesanan
             ],
         ], 200);
     }
