@@ -24,6 +24,7 @@ class TransaksiController extends Controller
             'diskon' => 'required',
             'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
+            'tota_qty' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -116,7 +117,29 @@ class TransaksiController extends Controller
         $transaksi = DB::table('transaksi')
             ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
             ->join('users', 'pesanan.user_id', '=', 'users.id')
-            ->select('transaksi.*', 'pesanan.*', 'users.name', 'transaksi.id as tid', 'pesanan.id as pid', 'users.id as uid', 'transaksi.created_at as cat')
+            ->select(
+                'transaksi.pesanan_id',
+                'transaksi.tipe_pembayaran',
+                'transaksi.status_pembayaran',
+                'transaksi.diskon',
+                'transaksi.subtotal_produk',
+                'transaksi.subtotal_pengiriman',
+                'transaksi.tota_qty',
+                'transaksi.total_pembayaran',
+                'transaksi.kode_transaksi',
+                'transaksi.total_dpp',
+                'transaksi.total_ppn',
+                'transaksi.dpp_terutang',
+                'transaksi.ppn_terutang',
+                'transaksi.dpp_dibebaskan',
+                'transaksi.ppn_dibebaskan',
+                'pesanan.status_pemesanan',
+                'users.name',
+                'transaksi.id as tid',
+                'pesanan.id as pid',
+                'users.id as uid',
+                'transaksi.created_at as cat'
+            )
             ->orderBy('cat', 'desc')
             ->where('pesanan.user_id', '=', $id)
             ->get();

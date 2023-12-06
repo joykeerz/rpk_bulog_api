@@ -56,6 +56,7 @@ class PesananController extends Controller
             'user_id' => 'required',
             'alamat_id' => 'required',
             'kurir_id' =>   'required',
+            'gudang_id' =>   'required',
         ]);
 
         if ($validator->fails()) {
@@ -68,7 +69,8 @@ class PesananController extends Controller
             'user_id' => $request->user_id,
             'alamat_id' => $request->alamat_id,
             'kurir_id' => $request->kurir_id,
-            'status_pemesanan' => 'pesanan belum dikonfirmasi',
+            'gudang_id' => $request->gudang_id,
+            'status_pemesanan' => 'menunggu verifikasi',
         ]);
 
         if (!$pesanan) {
@@ -102,6 +104,11 @@ class PesananController extends Controller
                 'qty' => 'required',
                 'harga' => 'required',
                 'stok_id' => 'required',
+                'dpp' => 'required',
+                'ppn' => 'required',
+                'jenis_pajak' => 'required',
+                'persentase_pajak' => 'required',
+                'subtotal_detail' => 'required',
             ]);
 
             if ($validator->fails()) {
@@ -115,6 +122,11 @@ class PesananController extends Controller
                 'produk_id' => $inputProduct[$i]['produk_id'],
                 'qty' => $inputProduct[$i]['qty'],
                 'harga' => $inputProduct[$i]['harga'],
+                'dpp' => $inputProduct[$i]['dpp'],
+                'ppn' => $inputProduct[$i]['ppn'],
+                'jenis_pajak' => $inputProduct[$i]['jenis_pajak'],
+                'persentase_pajak' => $inputProduct[$i]['persentase_pajak'],
+                'subtotal_detail' => $inputProduct[$i]['subtotal_detail'],
             ]);
 
             $currentStock = Stok::find($inputProduct[$i]['stok_id']);
@@ -125,7 +137,7 @@ class PesananController extends Controller
             }
             $currentStock->decrement('jumlah_stok', $inputProduct[$i]['qty']);
             $currentStock->save();
-            $total += $inputProduct[$i]['harga'];
+            $total += $inputProduct[$i]['subtotal_detail'];
         }
 
         $detailPesanan = DB::table('detail_pesanan')->insert($listProduct);
@@ -141,6 +153,4 @@ class PesananController extends Controller
             'data' => $detailPesanan
         ], 201);
     }
-
-
 }
