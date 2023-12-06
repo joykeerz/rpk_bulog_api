@@ -124,7 +124,7 @@ class TransaksiController extends Controller
                 'transaksi.diskon',
                 'transaksi.subtotal_produk',
                 'transaksi.subtotal_pengiriman',
-                'transaksi.tota_qty',
+                'transaksi.total_qty',
                 'transaksi.total_pembayaran',
                 'transaksi.kode_transaksi',
                 'transaksi.total_dpp',
