@@ -124,7 +124,7 @@ class TransaksiController extends Controller
         if (empty($transaksi)) {
             return response()->json([
                 'error' => 'Transaksi not found'
-            ], '404');
+            ], 200);
         };
 
         return response()->json([
