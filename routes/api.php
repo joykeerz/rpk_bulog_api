@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\PesananController;
 use App\Http\Controllers\Api\ProductController;
