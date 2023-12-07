@@ -16,10 +16,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // return response()->json([
-        //     'message' => $request->input(),
-        // ], 200);
-
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
@@ -147,7 +143,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
