@@ -87,3 +87,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
     });
 
+    ///berita Routes
+    Route::prefix('berita')->group(function () {
+        Route::get('/', [BeritaController::class, 'index']);
+        Route::get('/{id}', [BeritaController::class, 'show']);
+    });
+
