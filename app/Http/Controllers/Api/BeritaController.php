@@ -26,7 +26,7 @@ class BeritaController extends Controller
             'berita.judul_berita',
             'berita.deskripsi_berita',
             'berita.gambar_berita',
-        )->orderBy('cat', 'desc')->simplePaginate(10);
+        )->orderBy('created_at', 'desc')->simplePaginate(10);
 
         if (empty($berita)) {
             return response()->json([
