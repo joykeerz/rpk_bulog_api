@@ -26,7 +26,7 @@ class BeritaController extends Controller
             'berita.judul_berita',
             'berita.deskripsi_berita',
             'berita.gambar_berita',
-        )->orderBy('created_at', 'desc')->simplePaginate(2);
+        )->orderBy('created_at', 'desc')->simplePaginate(5);
 
         if (empty($berita)) {
             return response()->json([
@@ -34,9 +34,7 @@ class BeritaController extends Controller
             ], '404');
         };
 
-        return response()->json([
-            'data' => $berita,
-        ], 200);
+        return response()->json($berita, 200);
     }
 
     /**
@@ -59,9 +57,7 @@ class BeritaController extends Controller
                 'error' => "there's no data yet"
             ], '404');
         };
-        return response()->json([
-            'data' => $berita,
-        ], 200);
+        return response()->json($berita, 200);
     }
 
     /**
