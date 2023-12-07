@@ -8,6 +8,7 @@ use App\Models\Biodata;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -45,7 +46,7 @@ class AuthController extends Controller
             'no_ktp' => 'required|string|max:255',
             'kode_customer' => 'required|string|max:255',
             'ktp_img' => 'required|file|image|mimes:jpg,jpeg,png|max:10000',
-        ],[
+        ], [
             'name.required' => 'Nama harus diisi',
             'email.required' => 'Email harus diisi',
             'email.unique' => 'Email sudah terdaftar',
@@ -198,9 +199,37 @@ class AuthController extends Controller
 
     public function getCurrentUser()
     {
+        $customer = DB::table('users')
+            ->join('biodata', 'users.id', '=', 'biodata.user_id')
+            ->join('alamat', 'biodata.alamat_id', '=', 'alamat.id')
+            ->select(
+                'users.name',
+                'users.email',
+                'users.no_hp',
+                'users.role_id',
+                'biodata.user_id',
+                'biodata.alamat_id',
+                'biodata.kode_customer',
+                'biodata.nama_rpk',
+                'biodata.no_ktp',
+                'biodata.ktp_img',
+                'alamat.jalan',
+                'alamat.jalan_ext',
+                'alamat.blok',
+                'alamat.rt',
+                'alamat.rw',
+                'alamat.provinsi',
+                'alamat.kota_kabupaten',
+                'alamat.kecamatan',
+                'alamat.kelurahan',
+                'alamat.negara',
+                'alamat.kode_pos',
+            )
+            ->where('users.id', Auth::user()->id)
+            ->first();
         return response()->json([
             'status_code' => 200,
-            'user' => Auth::user()
+            'data' => $customer,
         ]);
     }
 }
