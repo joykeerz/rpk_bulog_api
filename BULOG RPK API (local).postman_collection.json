@@ -32,13 +32,104 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"Wijoyo Wisnu Mukti\",\r\n    \"email\": \"wisnu.mukti10@gmail.com\",\r\n    \"password\": \"admin123\",\r\n    \"no_hp\": \"0895635344737\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "wijoyo wisnu mukti",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "wisnu.mukti10@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "admin123",
+									"type": "text"
+								},
+								{
+									"key": "no_hp",
+									"value": "0895635344737",
+									"type": "text"
+								},
+								{
+									"key": "jalan",
+									"value": "Jl Talaud 1",
+									"type": "text"
+								},
+								{
+									"key": "jalan_ext",
+									"value": "Gg Buana",
+									"type": "text"
+								},
+								{
+									"key": "blok",
+									"value": "blok JB No. 10",
+									"type": "text"
+								},
+								{
+									"key": "rt",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "rw",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "provinsi",
+									"value": "Banten",
+									"type": "text"
+								},
+								{
+									"key": "kota_kabupaten",
+									"value": "Tangerang Selatan",
+									"type": "text"
+								},
+								{
+									"key": "kecamatan",
+									"value": "Serpong",
+									"type": "text"
+								},
+								{
+									"key": "kelurahan",
+									"value": "Rawa Buntu",
+									"type": "text"
+								},
+								{
+									"key": "kode_pos",
+									"value": "15310",
+									"type": "text"
+								},
+								{
+									"key": "nama_rpk",
+									"value": "RPK Jaya",
+									"type": "text"
+								},
+								{
+									"key": "no_ktp",
+									"value": "000022223939",
+									"type": "text"
+								},
+								{
+									"key": "kode_customer",
+									"value": "K1000",
+									"type": "text"
+								},
+								{
+									"key": "ktp_img",
+									"type": "file",
+									"src": "/C:/Users/wisnu/Downloads/pngtree-ktp-residents-identity-card-id-card-free-vector-png-image_6555300.png"
+								},
+								{
+									"key": "negara",
+									"value": "indonesia",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "{{base_url}}/api/register",
@@ -76,7 +167,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"admin@mail.com\",\r\n    \"password\": \"admin123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"wisnu.mukti10@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -158,7 +249,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "1|iqOHwQ4YnE9ojLwCfKRFOkTqKMAOqmLt12NJrzCv209b82d6",
+									"value": "3|n8QoKsQNGkJ2GLxkiTB77A1GLDrrJJ7FeecdojLT5f9cb74b",
 									"type": "string"
 								}
 							]
@@ -868,7 +959,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"tipe_pembayaran\": \"none\",\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": \"100000\",\r\n    \"subtotal_pengiriman\": \"25000\"\r\n}",
+							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\",\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000,\r\n    \"subtotal_pengiriman\": 25000,\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
