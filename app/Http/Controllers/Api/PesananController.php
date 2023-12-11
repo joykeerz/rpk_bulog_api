@@ -70,7 +70,7 @@ class PesananController extends Controller
             'alamat_id' => $request->alamat_id,
             'kurir_id' => $request->kurir_id,
             'gudang_id' => $request->gudang_id,
-            'status_pemesanan' => 'menunggu verifikasi',
+            'status_pemesanan' => 'belum dibayar',
         ]);
 
         if (!$pesanan) {
