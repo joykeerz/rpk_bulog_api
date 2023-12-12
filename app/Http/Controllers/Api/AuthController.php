@@ -31,7 +31,7 @@ class AuthController extends Controller
         //         )->post($url);
 
         //         $responseData = $response->json();
-        //         return response()->json($responseData);
+        //         return response()->json($responseData['path']);
         //     } else {
         //         return response()->json(['success' => false, 'error' => 'No file provided'], 400);
         //     }
@@ -112,7 +112,7 @@ class AuthController extends Controller
                 $fileName
             )->post($url);
             $responseData = $response->json();
-            $validatedData['ktp_img'] = response()->json($responseData['path']);
+            $filePath = $responseData['path'];
         }
 
         $user = User::create([
