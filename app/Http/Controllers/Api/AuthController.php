@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -80,6 +81,25 @@ class AuthController extends Controller
         if ($request->hasFile('ktp_img')) {
             $filePath = $request->file('ktp_img')->store('images/ktp', 'public');
             $validatedData['ktp_img'] = $filePath;
+            $filename = pathinfo($filePath, PATHINFO_FILENAME);
+
+            /* send image to backend storage from api */
+            $url = env('API_DASHBOARD_URL'. '/mobile/receive-ktp-image');
+            $response = Http::attach(
+                'ktp_img',
+                file_get_contents($request->file('ktp_img')),
+                $filename
+            )->post($url, [
+                'image_name' => $filename,
+            ]);
+
+            // $response = Http::attach(
+            //     'ktp_img',
+            //     file_get_contents($request->file('ktp_img')),
+            //     $filePath
+            // )->post($url, [
+            //     'image_name' => $filePath,
+            // ]);
         }
 
         $user = User::create([
