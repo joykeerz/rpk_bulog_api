@@ -84,14 +84,14 @@ class AuthController extends Controller
             $filename = pathinfo($filePath, PATHINFO_FILENAME);
 
             /* send image to backend storage from api */
-            $url = env('API_DASHBOARD_URL'. '/mobile/receive-ktp-image');
-            $response = Http::attach(
-                'ktp_img',
-                file_get_contents($request->file('ktp_img')),
-                $filename
-            )->post($url, [
-                'image_name' => $filename,
-            ]);
+            // $url = env('API_DASHBOARD_URL'. '/mobile/receive-ktp-image');
+            // $response = Http::attach(
+            //     'ktp_img',
+            //     file_get_contents($request->file('ktp_img')),
+            //     $filename
+            // )->post($url, [
+            //     'image_name' => $filename,
+            // ]);
 
             // $response = Http::attach(
             //     'ktp_img',
