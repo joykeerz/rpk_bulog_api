@@ -1073,6 +1073,69 @@
 			]
 		},
 		{
+			"name": "Banner",
+			"item": [
+				{
+					"name": "Get All Banner (5 Data Limit)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Banner",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Berita",
+			"item": [
+				{
+					"name": "Get All Berita (Paginate)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/berita",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"berita"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Berita",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/berita/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"berita",
+								"1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Check Connection API",
 			"request": {
 				"method": "GET",
@@ -1118,7 +1181,7 @@
 	"variable": [
 		{
 			"key": "base_url",
-			"value": "http://127.0.0.1:8000",
+			"value": "http://127.0.0.1:8081",
 			"type": "string"
 		}
 	]

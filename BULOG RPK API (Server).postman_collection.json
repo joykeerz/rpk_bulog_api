@@ -60,7 +60,7 @@
 									"type": "text"
 								},
 								{
-									"key": "jalant_ext",
+									"key": "jalan_ext",
 									"value": "Gg Batu",
 									"type": "text"
 								},
@@ -991,7 +991,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"produk\": [\r\n        {\r\n            \"pesanan_id\": 1,\r\n            \"produk_id\": 1,\r\n            \"stok_id\": 1,\r\n            \"qty\": 2,\r\n            \"harga\": 9000,\r\n            \"dpp\": 1000,\r\n            \"ppn\": 1200,\r\n            \"jenis_pajak\": \"include\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 18000\r\n        },\r\n        {\r\n            \"stok_id\": 2,\r\n            \"pesanan_id\": 1,\r\n            \"produk_id\": 2,\r\n            \"qty\": 4,\r\n            \"harga\": 10000,\r\n            \"dpp\": 1100,\r\n            \"ppn\": 1300,\r\n            \"jenis_pajak\": \"exclude\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 22400\r\n        },\r\n        {\r\n            \"stok_id\": 3,\r\n            \"pesanan_id\": 1,\r\n            \"produk_id\": 3,\r\n            \"qty\": 1,\r\n            \"harga\": 7000,\r\n            \"dpp\": 900,\r\n            \"ppn\": 1000,\r\n            \"jenis_pajak\": \"non\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 7000\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"produk\": [\r\n        {\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 1,\r\n            \"stok_id\": 1,\r\n            \"qty\": 2,\r\n            \"harga\": 9000, //harga barang satuan\r\n            \"dpp\": 1000,\r\n            \"ppn\": 1200,\r\n            \"jenis_pajak\": \"include\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 18000 //harga dikali quantity setelah kena pajak\r\n        },\r\n        {\r\n            \"stok_id\": 2,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 2,\r\n            \"qty\": 4,\r\n            \"harga\": 10000,\r\n            \"dpp\": 1100,\r\n            \"ppn\": 1300,\r\n            \"jenis_pajak\": \"exclude\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 22400\r\n        },\r\n        {\r\n            \"stok_id\": 3,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 3,\r\n            \"qty\": 1,\r\n            \"harga\": 7000,\r\n            \"dpp\": 900,\r\n            \"ppn\": 1000,\r\n            \"jenis_pajak\": \"non\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 7000\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1036,7 +1036,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\",\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000,\r\n    \"subtotal_pengiriman\": 25000,\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\"\r\n}",
+							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\", \r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000, //total harga dari semua produk termasuk pajak\r\n    \"subtotal_pengiriman\": 25000, //biaya pengiriman\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1044,14 +1044,14 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/pesanan/1/transaksi",
+							"raw": "{{base_url}}/api/pesanan/8/transaksi",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"pesanan",
-								"1",
+								"8",
 								"transaksi"
 							]
 						}
@@ -1186,6 +1186,27 @@
 								"1"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Banner",
+			"item": [
+				{
+					"name": "Get All Banner (5 Data Limit)",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				},
+				{
+					"name": "Get Single Banner",
+					"request": {
+						"method": "GET",
+						"header": []
 					},
 					"response": []
 				}

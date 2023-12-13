@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BeritaController;
 use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\PesananController;
@@ -92,5 +93,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('berita')->group(function () {
         Route::get('/', [BeritaController::class, 'index']);
         Route::get('/{id}', [BeritaController::class, 'show']);
+    });
+
+    Route::prefix('banner')->group(function(){
+        Route::get('/', [BannerController::class, 'index']);
+        Route::get('/{id}', [BannerController::class, 'show']);
     });
 
