@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class GudangController extends Controller
 {
-    public function getAllGudang(){
+    public function getAllGudang()
+    {
         $gudang  = DB::table('gudang')
-        ->join('alamat', 'gudang.alamat_id', '=', 'alamat.id')
-        ->select('gudang.*', 'alamat.*', 'gudang.id as gid', 'alamat.id as aid', 'gudang.created_at as cat')
-        ->orderBy('cat', 'desc')
-        ->get();
+            ->join('alamat', 'gudang.alamat_id', '=', 'alamat.id')
+            ->select('gudang.*', 'alamat.*', 'gudang.id as gid', 'alamat.id as aid', 'gudang.created_at as cat')
+            ->orderBy('cat', 'desc')
+            ->get();
 
-        if(empty($gudang)){
+        if (empty($gudang)) {
             return response()->json([
                 'error' => "There's no data yet"
             ], '404');
@@ -29,14 +30,15 @@ class GudangController extends Controller
         ], 200);
     }
 
-    public function getGudang($id){
+    public function getGudang($id)
+    {
         $gudang = DB::table('gudang')
-        ->join('alamat', 'gudang.alamat_id', '=', 'alamat.id')
-        ->select('gudang.*', 'alamat.*', 'gudang.id as gid', 'alamat.id as aid')
-        ->where('gudang.id', '=', $id)
-        ->first();
+            ->join('alamat', 'gudang.alamat_id', '=', 'alamat.id')
+            ->select('gudang.*', 'alamat.*', 'gudang.id as gid', 'alamat.id as aid')
+            ->where('gudang.id', '=', $id)
+            ->first();
 
-        if(empty($gudang)){
+        if (empty($gudang)) {
             return response()->json([
                 'error' => 'Gudang not found'
             ], '404');
@@ -44,6 +46,25 @@ class GudangController extends Controller
 
         return response()->json([
             'data' => $gudang,
+        ], 200);
+    }
+
+    public function GetKodeCompanyByGudang(string $id)
+    {
+        $kodeCompany = DB::table('gudang')
+            ->join('companies', 'gudang.company_id', '=', 'companies.id')
+            ->select('companies.kode_company')
+            ->where('gudang.id', '=', $id)
+            ->first();
+
+        if (empty($kodeCompany)) {
+            return response()->json([
+                'error' => 'Kode Company not found'
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $kodeCompany,
         ], 200);
     }
 }

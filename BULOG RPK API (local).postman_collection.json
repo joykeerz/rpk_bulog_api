@@ -695,6 +695,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Kode Company by Gudang ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gudang/2/kode",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gudang",
+								"2",
+								"kode"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1079,7 +1099,18 @@
 					"name": "Get All Banner (5 Data Limit)",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/banner/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"banner",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1087,7 +1118,18 @@
 					"name": "Get Single Banner",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/banner/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"banner",
+								"1"
+							]
+						}
 					},
 					"response": []
 				}

@@ -62,7 +62,7 @@ class PesananController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors()
-            ], 400);
+            ], 200);
         }
 
         $pesanan = Pesanan::create([
@@ -114,7 +114,7 @@ class PesananController extends Controller
             if ($validator->fails()) {
                 return response()->json([
                     'error' => $validator->errors()
-                ], 400);
+                ], 200);
             }
 
             array_push($listProduct, [

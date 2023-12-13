@@ -687,6 +687,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Kode Company By Gudang ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gudang/1/kode",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gudang",
+								"1",
+								"kode"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},

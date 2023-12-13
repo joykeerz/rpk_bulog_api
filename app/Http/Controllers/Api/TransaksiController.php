@@ -50,7 +50,7 @@ class TransaksiController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors()
-            ], 400);
+            ], 200);
         }
 
         $transaksi = new Transaksi;

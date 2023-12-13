@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('gudang')->group(function () {
         Route::get('/', [GudangController::class, 'getAllGudang']);
         Route::get('/{id}', [GudangController::class, 'getGudang']);
+        Route::get('/{id}/kode', [GudangController::class, 'GetKodeCompanyByGudang']);
     });
 
     ///Stock Routes
