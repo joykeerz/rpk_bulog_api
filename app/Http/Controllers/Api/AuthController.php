@@ -212,7 +212,8 @@ class AuthController extends Controller
         return response()->json([
             'status_code' => 200,
             'access_token' => $token,
-            'token_type' => 'Bearer'
+            'token_type' => 'Bearer',
+            'status_verifikasi' => $user->isVerified,
         ]);
     }
 
