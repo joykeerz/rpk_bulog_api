@@ -22,7 +22,8 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->orderBy('cat', 'desc')
             // ->simplePaginate(1);
             ->get();
@@ -45,7 +46,8 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('produk.kategori_id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -95,7 +97,8 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'satuan_unit.satuan_unit_produk', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->select('stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'satuan_unit.satuan_unit_produk', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('gudang.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -119,7 +122,8 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('produk.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
@@ -143,7 +147,8 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('stok.id', '=', $id)
             ->orderBy('cat', 'desc')
             // ->paginate(10);
