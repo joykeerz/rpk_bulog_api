@@ -72,7 +72,7 @@ class StockController extends Controller
             ->join('gudang', 'stok.gudang_id', '=', 'gudang.id')
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->join('satuan_unit', 'produk.satuan_unit_id', '=', 'satuan_unit.id')
-            ->join('paajak', 'produk.pajak_id', '=', 'pajak.id')
+            ->join('pajak', 'produk.pajak_id', '=', 'pajak.id')
             ->select('satuan_unit.satuan_unit_produk', 'stok.*', 'produk.*', 'gudang.*', 'kategori.*', 'pajak.jenis_pajak', 'pajak.nama_pajak', 'pajak.persentase_pajak', 'stok.id as sid', 'produk.id as pid', 'gudang.id as gid', 'kategori.id as kid', 'stok.created_at as cat')
             ->where('produk.kategori_id', '=', $id)
             ->where('gudang.id', '=', $gid)
