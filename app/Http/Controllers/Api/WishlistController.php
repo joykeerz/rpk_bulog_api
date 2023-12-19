@@ -61,6 +61,12 @@ class WishlistController extends Controller
             'gudang_id.required' => 'gudang harus di isi',
         ]);
 
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 200);
+        }
+
         $wishlist = new Wishlist;
         $wishlist->user_id = Auth::user()->id;
         $wishlist->stok_id = $request->stok_id;

@@ -47,7 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
     });
 
-    Route::prefix('wishlist')->group(function () {
+    Route::prefix('cart')->group(function () {
         Route::get('/', [WishlistController::class, 'getUserWishlist']);
         Route::post('/add', [WishlistController::class, 'addUserWishlist']);
         Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
