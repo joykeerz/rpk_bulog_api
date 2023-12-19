@@ -11,6 +11,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
+use App\Http\Controllers\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,9 +49,11 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::prefix('cart')->group(function () {
-        Route::get('/', [WishlistController::class, 'getUserWishlist']);
-        Route::post('/add', [WishlistController::class, 'addUserWishlist']);
-        Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
+        Route::get('/', [CartController::class, 'getUserCart']);
+        Route::post('/add', [CartController::class, 'createUserCart']);
+        Route::get('/remove/{id}', [CartController::class, 'removeUserCart']);
+        Route::post('/update/{id}/increase', [CartController::class, 'increaseUserCart']);
+        Route::post('/update/{id}/decrease', [CartController::class, 'decrementUserCart']);
     });
 });
 ///Product Routes
