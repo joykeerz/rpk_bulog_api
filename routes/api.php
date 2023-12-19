@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\PesananController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\TransaksiController;
+use App\Http\Controllers\Api\WishlistController;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,6 +40,12 @@ Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::prefix('wishlist')->group(function () {
+        Route::get('/', [WishlistController::class, 'getUserWishlist']);
+        Route::post('/add', [WishlistController::class, 'addUserWishlist']);
+        Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
+    });
 });
 ///Product Routes
 Route::prefix('products')->group(function () {
@@ -99,8 +106,4 @@ Route::prefix('berita')->group(function () {
 Route::prefix('banner')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::get('/{id}', [BannerController::class, 'show']);
-});
-
-Route::prefix('wishlist')->group(function () {
-    Route::get('/', [BannerController::class, 'index']);
 });
