@@ -14,20 +14,30 @@ class WishlistController extends Controller
 {
     public function getUserWishlist()
     {
-        if (!Auth::user()) {
-            return response()->json([
-                'error' => 'User need to login first'
-            ], 400);
-        }
-
         $wishlist = DB::table('wishlists')
-            ->where('user_id', '=', Auth::user()->id)
+            ->join('stok', 'wishlists.stok_id', 'stok.id')
+            ->join('gudang', 'wishlists.gudang_id', 'gudang.id')
+            ->join('produk', 'stok.produk_id', 'produk.id')
+            ->join('pajak', 'produk.pajak_id', 'pajak.id')
+            ->where('wishlists.user_id', '=', Auth::user()->id)
+            ->select(
+                'wishlists.id as wid',
+                'stok.id as sid',
+                'produk.id as pid',
+                'gudang.id as gid',
+                'produk.nama_produk as nama',
+                'stok.harga_stok as harga',
+                'produk.produk_file_path as image',
+                'pajak.jenis_pajak',
+                'pajak.persentase_pajak',
+                'gudang.nama_gudang'
+            )
             ->get();
 
         if (empty($wishlist) || $wishlist->count() < 1 || !$wishlist) {
             return response()->json([
-                'error' => "there's no wishlist yet"
-            ], '404');
+                'data' => $wishlist
+            ], 200);
         };
 
         return response()->json([
@@ -45,13 +55,16 @@ class WishlistController extends Controller
 
         $validator = Validator::make($request->all(), [
             'stok_id' => 'required',
+            'gudang_id' => 'required',
         ], [
             'stok_id.required' => 'stok harus di isi',
+            'gudang_id.required' => 'gudang harus di isi',
         ]);
 
         $wishlist = new Wishlist;
         $wishlist->user_id = Auth::user()->id;
         $wishlist->stok_id = $request->stok_id;
+        $wishlist->gudang_id = $request->gudang_id;
         if ($request->has('wishlist_group')) {
             $wishlist->wishlist_group = $request->wishlist_group;
         }
