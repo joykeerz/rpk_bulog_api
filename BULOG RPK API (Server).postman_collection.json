@@ -1267,21 +1267,11 @@
 				{
 					"name": "Create User Wishlist Copy",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "3|UTpPEYEvqu1Pl7rSdalpufYkoeVSpznTS3IY0e6Sc8f76df0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"stok_id\": 1\r\n}",
+							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1327,6 +1317,154 @@
 								"wishlist",
 								"remove",
 								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cart",
+			"item": [
+				{
+					"name": "Create User Cart Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1\r\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/cart/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Cart Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cart",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Increment Cart Item Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cart/update/2/increase",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"update",
+								"2",
+								"increase"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Decrement Cart Item Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cart/update/2/decrease",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"update",
+								"2",
+								"decrease"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Cart Item Copy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/cart/remove/2",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"remove",
+								"2"
 							]
 						}
 					},
