@@ -40,64 +40,67 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
 });
-    ///Product Routes
-    Route::prefix('products')->group(function () {
-        Route::get('/', [ProductController::class, 'getProducts']);
-        Route::get('/{id}', [ProductController::class, 'getProduct']);
-        Route::get('/category/{id}', [ProductController::class, 'getProductFromCategory']);
-        Route::post('/search', [ProductController::class, 'searchProduct']);
-        Route::post('/create', [ProductController::class, 'createProduct']);
-    });
+///Product Routes
+Route::prefix('products')->group(function () {
+    Route::get('/', [ProductController::class, 'getProducts']);
+    Route::get('/{id}', [ProductController::class, 'getProduct']);
+    Route::get('/category/{id}', [ProductController::class, 'getProductFromCategory']);
+    Route::post('/search', [ProductController::class, 'searchProduct']);
+    Route::post('/create', [ProductController::class, 'createProduct']);
+});
 
-    ///Category Routes
-    Route::prefix('categories')->group(function () {
-        Route::get('/', [ProductController::class, 'getCategories']);
-        Route::post('/search', [ProductController::class, 'searchCategory']);
-        Route::post('/create', [ProductController::class, 'createCategory']);
-    });
+///Category Routes
+Route::prefix('categories')->group(function () {
+    Route::get('/', [ProductController::class, 'getCategories']);
+    Route::post('/search', [ProductController::class, 'searchCategory']);
+    Route::post('/create', [ProductController::class, 'createCategory']);
+});
 
-    ///gudang Routes
-    Route::prefix('gudang')->group(function () {
-        Route::get('/', [GudangController::class, 'getAllGudang']);
-        Route::get('/{id}', [GudangController::class, 'getGudang']);
-        Route::get('/{id}/kode', [GudangController::class, 'GetKodeCompanyByGudang']);
-    });
+///gudang Routes
+Route::prefix('gudang')->group(function () {
+    Route::get('/', [GudangController::class, 'getAllGudang']);
+    Route::get('/{id}', [GudangController::class, 'getGudang']);
+    Route::get('/{id}/kode', [GudangController::class, 'GetKodeCompanyByGudang']);
+});
 
-    ///Stock Routes
-    Route::prefix('stock')->group(function () {
-        Route::get('/', [StockController::class, 'getAllStocks']);
-        Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
-        Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
-        Route::get('/category/{id}', [StockController::class, 'getStocksByCategory']);
-        Route::get('/category/{cid}/gudang/{gid}', [StockController::class, 'getStocksByCategoryAndGudang']);
-        Route::get('/{id}', [StockController::class, 'getSingleStock']);
-        Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
-        Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
-    });
+///Stock Routes
+Route::prefix('stock')->group(function () {
+    Route::get('/', [StockController::class, 'getAllStocks']);
+    Route::get('/gudang/{id}', [StockController::class, 'getStockFromGudang']);
+    Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
+    Route::get('/category/{id}', [StockController::class, 'getStocksByCategory']);
+    Route::get('/category/{cid}/gudang/{gid}', [StockController::class, 'getStocksByCategoryAndGudang']);
+    Route::get('/{id}', [StockController::class, 'getSingleStock']);
+    Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
+    Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
+});
 
-    ///Pesanan Routes
-    Route::prefix('pesanan')->group(function () {
-        Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
-        Route::post('/create', [PesananController::class, 'createPesanan']);
-        Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
-        Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
-    });
+///Pesanan Routes
+Route::prefix('pesanan')->group(function () {
+    Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
+    Route::post('/create', [PesananController::class, 'createPesanan']);
+    Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
+    Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
+});
 
-    ///transaksi Routes
-    Route::prefix('transaksi')->group(function () {
-        Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
-        Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
-        Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
-    });
+///transaksi Routes
+Route::prefix('transaksi')->group(function () {
+    Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
+    Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
+    Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
+});
 
-    ///berita Routes
-    Route::prefix('berita')->group(function () {
-        Route::get('/', [BeritaController::class, 'index']);
-        Route::get('/{id}', [BeritaController::class, 'show']);
-    });
+///berita Routes
+Route::prefix('berita')->group(function () {
+    Route::get('/', [BeritaController::class, 'index']);
+    Route::get('/{id}', [BeritaController::class, 'show']);
+});
 
-    Route::prefix('banner')->group(function(){
-        Route::get('/', [BannerController::class, 'index']);
-        Route::get('/{id}', [BannerController::class, 'show']);
-    });
+Route::prefix('banner')->group(function () {
+    Route::get('/', [BannerController::class, 'index']);
+    Route::get('/{id}', [BannerController::class, 'show']);
+});
 
+Route::prefix('wishlist')->group(function () {
+    Route::get('/', [BannerController::class, 'index']);
+});
