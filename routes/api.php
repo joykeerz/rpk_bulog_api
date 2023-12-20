@@ -11,7 +11,7 @@ use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
-use App\Http\Controllers\CartController;
+use App\Http\Controllers\Api\CartController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::get('/gudang/user', [GudangController::class, 'getgudangByUser']);
 
     Route::prefix('wishlist')->group(function () {
         Route::get('/', [WishlistController::class, 'getUserWishlist']);
