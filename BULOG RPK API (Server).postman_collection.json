@@ -707,6 +707,35 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Get Gudang By User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|EidHiIkKkxOISPlpCTFkurSeG54te5sUdexuXCC10b12ad10",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/gudang/user",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gudang",
+								"user"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1344,7 +1373,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1\r\n}"
+							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1,\r\n    \"quantity\": 5,\r\n    \"dpp\": 1300,\r\n    \"ppn\": 1500,\r\n    \"subtotal_detail\": 30000\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cart/add",
@@ -1363,6 +1392,16 @@
 				{
 					"name": "Get User Cart Copy",
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "2|EidHiIkKkxOISPlpCTFkurSeG54te5sUdexuXCC10b12ad10",
+									"type": "string"
+								}
+							]
+						},
 						"method": "GET",
 						"header": [],
 						"url": {
