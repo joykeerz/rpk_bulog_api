@@ -73,8 +73,14 @@ class CartController extends Controller
         }
 
         $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
-        return $currentCart;
         if ($currentCart) {
+            $currentCart->quantity += 1;
+            $currentCart->save();
+
+            return response()->json([
+                'data' => $currentCart
+            ], 200);
+        } else {
             $cart = new Cart;
             $cart->user_id = Auth::user()->id;
             $cart->stok_id = $request->stok_id;
@@ -84,13 +90,6 @@ class CartController extends Controller
             $cart->ppn = $request->ppn;
             $cart->subtotal_detail = $request->subtotal_detail;
             $cart->save();
-        } else {
-            $currentCart->quantity += 1;
-            $currentCart->save();
-
-            return response()->json([
-                'data' => $currentCart
-            ], 200);
         }
 
         if (!$cart) {
@@ -113,7 +112,7 @@ class CartController extends Controller
         }
 
         $cart = Cart::find($id);
-        if (empty($cart) || $cart->count() < 1 || !$cart) {
+        if (empty($cart) || !$cart) {
             return response()->json([
                 'error' => "cart not found"
             ], '404');
