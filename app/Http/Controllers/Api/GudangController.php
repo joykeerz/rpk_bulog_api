@@ -60,8 +60,8 @@ class GudangController extends Controller
 
         $gudang = DB::table('gudang')
             ->join('alamat', 'alamat.id', 'gudang.alamat_id')
-            ->join('biodata', 'biodata.alamat_id', 'alamat.id')
-            ->join('users', 'users.id', 'biodata.user_id')
+            // ->join('biodata', 'biodata.alamat_id', 'alamat.id')
+            // ->join('users', 'users.id', 'biodata.user_id')
             ->where('alamat.kota_kabupaten', $customer->kota_kabupaten)
             ->first();
         return $gudang;
