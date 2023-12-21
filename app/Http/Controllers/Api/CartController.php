@@ -73,6 +73,7 @@ class CartController extends Controller
         }
 
         $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
+        return $currentCart;
         if ($currentCart) {
             $cart = new Cart;
             $cart->user_id = Auth::user()->id;
