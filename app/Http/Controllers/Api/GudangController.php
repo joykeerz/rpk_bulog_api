@@ -57,6 +57,7 @@ class GudangController extends Controller
             ->join('alamat', 'alamat.id', 'biodata.alamat_id')
             ->where('users.id', Auth::user()->id)
             ->first();
+        return $customer;
 
         $gudang = DB::table('gudang')
             ->join('alamat', 'alamat.id', 'gudang.alamat_id')
