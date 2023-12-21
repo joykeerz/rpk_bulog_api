@@ -67,6 +67,13 @@ class WishlistController extends Controller
             ], 200);
         }
 
+        $currentWishlist = Wishlist::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
+        if ($currentWishlist) {
+            return response()->json([
+                'message' => 'wishlist sudah ada'
+            ], 200);
+        }
+
         $wishlist = new Wishlist;
         $wishlist->user_id = Auth::user()->id;
         $wishlist->stok_id = $request->stok_id;

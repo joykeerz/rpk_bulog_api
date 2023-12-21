@@ -71,15 +71,25 @@ class CartController extends Controller
             ], 200);
         }
 
-        $cart = new Cart;
-        $cart->user_id = Auth::user()->id;
-        $cart->stok_id = $request->stok_id;
-        $cart->gudang_id = $request->gudang_id;
-        $cart->quantity = $request->quantity;
-        $cart->dpp = $request->dpp;
-        $cart->ppn = $request->ppn;
-        $cart->subtotal_detail = $request->subtotal_detail;
-        $cart->save();
+        $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
+        if ($currentCart) {
+            $cart = new Cart;
+            $cart->user_id = Auth::user()->id;
+            $cart->stok_id = $request->stok_id;
+            $cart->gudang_id = $request->gudang_id;
+            $cart->quantity = $request->quantity;
+            $cart->dpp = $request->dpp;
+            $cart->ppn = $request->ppn;
+            $cart->subtotal_detail = $request->subtotal_detail;
+            $cart->save();
+        } else {
+            $currentCart->quantity += 1;
+            $currentCart->save();
+
+            return response()->json([
+                'data' => $currentCart
+            ], 200);
+        }
 
         if (!$cart) {
             return response()->json([

@@ -17,28 +17,6 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // try {
-        //     $url = env('API_DASHBOARD_URL') . '/mobile/receive-ktp-image';
-
-        //     if ($request->hasFile('ktp_img')) {
-        //         $image = $request->file('ktp_img');
-        //         $fileName = 'image_' . time() . '.' . $image->getClientOriginalExtension();
-        //         $imageContent = file_get_contents($image->getRealPath());
-        //         $response = Http::attach(
-        //             'ktp_img',
-        //             $imageContent,
-        //             $fileName
-        //         )->post($url);
-
-        //         $responseData = $response->json();
-        //         return response()->json($responseData['path']);
-        //     } else {
-        //         return response()->json(['success' => false, 'error' => 'No file provided'], 400);
-        //     }
-        // } catch (\Exception $e) {
-        //     return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
-        // }
-
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
