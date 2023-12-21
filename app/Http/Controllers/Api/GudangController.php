@@ -65,7 +65,7 @@ class GudangController extends Controller
             ->where('alamat.kota_kabupaten', $customer->kota_kabupaten)
             ->first();
 
-        if (empty($gudang) || !$gudang || $gudang->count() <= 0) {
+        if (empty($gudang) || !$gudang) {
             return response()->json([
                 'data' => []
             ], '404');
