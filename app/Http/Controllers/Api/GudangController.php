@@ -63,6 +63,7 @@ class GudangController extends Controller
             // ->join('biodata', 'biodata.alamat_id', 'alamat.id')
             // ->join('users', 'users.id', 'biodata.user_id')
             ->where('alamat.kota_kabupaten', $customer->kota_kabupaten)
+            ->select('gudang.nama_gudang', 'gudang.id')
             ->first();
 
         if (empty($gudang) || !$gudang) {
