@@ -50,7 +50,7 @@ class CartController extends Controller
 
     public function createUserCart(Request $request)
     {
-        return request()->input();
+        // return request()->input();
         if (!$request->input()) {
             return response()->json([
                 'error' => 'please insert data'
