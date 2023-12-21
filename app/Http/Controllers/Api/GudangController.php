@@ -64,7 +64,6 @@ class GudangController extends Controller
             // ->join('users', 'users.id', 'biodata.user_id')
             ->where('alamat.kota_kabupaten', $customer->kota_kabupaten)
             ->first();
-        return $gudang;
 
         if (empty($gudang) || !$gudang || $gudang->count() <= 0) {
             return response()->json([
