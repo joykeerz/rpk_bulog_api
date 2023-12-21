@@ -74,7 +74,10 @@ class CartController extends Controller
 
         $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
         if ($currentCart) {
-            $currentCart->quantity += 1;
+            $currentCart->quantity += $request->quantity;
+            $currentCart->dpp += $request->dpp;
+            $currentCart->ppn += $request->ppn;
+            $currentCart->subtotal_detail += $request->subtotal_detail;
             $currentCart->save();
 
             return response()->json([
