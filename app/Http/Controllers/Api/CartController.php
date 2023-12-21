@@ -165,4 +165,21 @@ class CartController extends Controller
             'quantity' => $cart->quantity,
         ], 200);
     }
+
+    function clearCart()
+    {
+        $cart = Cart::where('user_id', Auth::user()->id)->get();
+
+        if (empty($cart) || $cart->count() < 1 || !$cart) {
+            return response()->json([
+                'error' => "cart not found"
+            ], '404');
+        };
+
+        $cart->delete();
+
+        return response()->json([
+            'message' => 'cart cleared',
+        ], 200);
+    }
 }

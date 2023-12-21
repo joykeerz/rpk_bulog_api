@@ -55,6 +55,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/remove/{id}', [CartController::class, 'removeUserCart']);
         Route::post('/update/{id}/increase', [CartController::class, 'increaseUserCart']);
         Route::post('/update/{id}/decrease', [CartController::class, 'decrementUserCart']);
+        Route::post('/clear', [CartController::class, 'clearCart']);
     });
 });
 ///Product Routes
