@@ -83,6 +83,7 @@ class CartController extends Controller
             return response()->json([
                 'data' => $currentCart
             ], 200);
+
         } else {
             $cart = new Cart;
             $cart->user_id = Auth::user()->id;
