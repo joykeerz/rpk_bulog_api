@@ -12,6 +12,7 @@ use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\DaftarAlamatController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,12 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/gudang/user', [GudangController::class, 'getgudangByUser']);
 
+    /* wishlist route*/
     Route::prefix('wishlist')->group(function () {
         Route::get('/', [WishlistController::class, 'getUserWishlist']);
         Route::post('/add', [WishlistController::class, 'addUserWishlist']);
         Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
     });
 
+    /* cart route*/
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'getUserCart']);
         Route::post('/add', [CartController::class, 'createUserCart']);
@@ -56,6 +59,13 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update/{id}/increase', [CartController::class, 'increaseUserCart']);
         Route::post('/update/{id}/decrease', [CartController::class, 'decrementUserCart']);
         Route::post('/clear', [CartController::class, 'clearCart']);
+    });
+
+    Route::prefix('daftar-alamat')->group(function () {
+        Route::get('/', [DaftarAlamatController::class, 'getDaftarAlamatUser']);
+        Route::post('/add', [DaftarAlamatController::class, 'addAlamat']);
+        Route::delete('/remove/{id}', [DaftarAlamatController::class, 'removeAlamat']);
+        Route::get('/toggle/{id}', [DaftarAlamatController::class, 'toggleAlamat']);
     });
 });
 ///Product Routes

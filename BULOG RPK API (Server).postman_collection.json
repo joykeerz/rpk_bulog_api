@@ -169,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"wisnu.mukti10@gmail.com\",\r\n    \"password\": \"admin123\"\r\n}",
+							"raw": "{\r\n    \"email\": \"manokrajin@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -711,16 +711,6 @@
 				{
 					"name": "Get Gudang By User",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "2|EidHiIkKkxOISPlpCTFkurSeG54te5sUdexuXCC10b12ad10",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1267,16 +1257,6 @@
 				{
 					"name": "Get User Wishlist Copy",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "3|UTpPEYEvqu1Pl7rSdalpufYkoeVSpznTS3IY0e6Sc8f76df0",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1359,21 +1339,16 @@
 				{
 					"name": "Create User Cart Copy",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1,\r\n    \"quantity\": 5,\r\n    \"dpp\": 1300,\r\n    \"ppn\": 1500,\r\n    \"subtotal_detail\": 30000\r\n}"
+							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1,\r\n    \"quantity\": 5,\r\n    \"dpp\": 1300,\r\n    \"ppn\": 1500,\r\n    \"subtotal_detail\": 30000\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
 						},
 						"url": {
 							"raw": "{{base_url}}/api/cart/add",
@@ -1482,20 +1457,10 @@
 				{
 					"name": "Remove Cart Item Copy",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "2|5r2f5yqE2hCwuyXuaByH0J6Xy4LYrwSB7gF4zLne9550b607",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/cart/remove/2",
+							"raw": "{{base_url}}/api/cart/remove/17",
 							"host": [
 								"{{base_url}}"
 							],
@@ -1503,7 +1468,99 @@
 								"api",
 								"cart",
 								"remove",
-								"2"
+								"17"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Daftar Alamat",
+			"item": [
+				{
+					"name": "Get Daftar Alamat User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/daftar-alamat/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"daftar-alamat",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Alamat User",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jalan\" : \"Jl Pending Kencana 3\",\r\n    \"jalan_ext\" : \"Gg Benda 7\",\r\n    \"blok\" : \"Blok IL No. 9\",\r\n    \"rt\" : \"1\",\r\n    \"rw\" : \"1\",\r\n    \"provinsi\" : \"DKI JAKARTA\",\r\n    \"kota_kabupaten\" : \"KOTA JAKARTA SELATAN\",\r\n    \"kecamatan\" : \"KEBAYORAN LAMA\",\r\n    \"kelurahan\" : \"KEBAYORAN LAMA SELATAN\",\r\n    \"kode_pos\" : \"51210\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/daftar-alamat/add",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"daftar-alamat",
+								"add"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove Alamat By ID",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/daftar-alamat/remove/11",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"daftar-alamat",
+								"remove",
+								"11"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Toggle Alamat by ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/daftar-alamat/toggle/12",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"daftar-alamat",
+								"toggle",
+								"12"
 							]
 						}
 					},

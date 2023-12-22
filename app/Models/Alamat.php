@@ -11,6 +11,10 @@ class Alamat extends Model
     protected $table = 'alamat';
     protected $guarded = ['id'];
 
+    public function daftarAlamat()
+    {
+        return $this->hasMany(DaftarAlamat::class);
+    }
     // public function biodata()
     // {
     //     return $this->belongsTo(Biodata::class);
