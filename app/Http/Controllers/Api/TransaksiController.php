@@ -32,7 +32,8 @@ class TransaksiController extends Controller
             'dpp_dibebaskan' => 'required',
             'ppn_dibebaskan' => 'required',
             'kode_company' => 'required',
-        ],[
+            'nomor_pembayaran' => 'required'
+        ], [
             'tipe_pembayaran.required' => 'Tipe Pembayaran tidak boleh kosong',
             'status_pembayaran.required' => 'Status Pembayaran tidak boleh kosong',
             'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
@@ -45,6 +46,7 @@ class TransaksiController extends Controller
             'dpp_dibebaskan.required' => 'DPP Dibebaskan tidak boleh kosong',
             'ppn_dibebaskan.required' => 'PPN Dibebaskan tidak boleh kosong',
             'kode_company.required' => 'Kode Company tidak boleh kosong',
+            'nomor_pembayaran.required' => 'Nomor pembayaran tidak boleh kosong',
         ]);
 
         if ($validator->fails()) {
@@ -69,6 +71,7 @@ class TransaksiController extends Controller
         $transaksi->ppn_terutang = $request->ppn_terutang;
         $transaksi->dpp_dibebaskan = $request->dpp_dibebaskan;
         $transaksi->ppn_dibebaskan = $request->ppn_dibebaskan;
+        $transaksi->nomor_pembayaran = $request->nomor_pembayaran;
         $transaksi->save();
 
         if (!$transaksi) {
