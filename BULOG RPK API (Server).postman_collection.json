@@ -169,7 +169,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"manokrajin@gmail.com\",\r\n    \"password\": \"12345678\"\r\n}",
+							"raw": "{\r\n    \"no_hp\": \"0895635344737\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1075,7 +1075,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\", \r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000, //total harga dari semua produk termasuk pajak\r\n    \"subtotal_pengiriman\": 25000, //biaya pengiriman\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\"\r\n}",
+							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\",\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000,\r\n    \"subtotal_pengiriman\": 25000,\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\",\r\n    \"nomor_pembayaran\": \"2380801\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
