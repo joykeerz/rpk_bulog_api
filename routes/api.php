@@ -44,14 +44,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/gudang/user', [GudangController::class, 'getgudangByUser']);
 
-    /* wishlist route*/
+    /* wishlist route */
     Route::prefix('wishlist')->group(function () {
         Route::get('/', [WishlistController::class, 'getUserWishlist']);
         Route::post('/add', [WishlistController::class, 'addUserWishlist']);
         Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
     });
 
-    /* cart route*/
+    /* cart route */
     Route::prefix('cart')->group(function () {
         Route::get('/', [CartController::class, 'getUserCart']);
         Route::post('/add', [CartController::class, 'createUserCart']);
@@ -68,6 +68,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/toggle/{id}', [DaftarAlamatController::class, 'toggleAlamat']);
     });
 });
+
 ///Product Routes
 Route::prefix('products')->group(function () {
     Route::get('/', [ProductController::class, 'getProducts']);

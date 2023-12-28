@@ -161,7 +161,7 @@ class AuthController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'email' => 'required|email',
+            'no_hp' => 'required|numeric',
             'password' => 'required|string|min:8'
         ]);
 
@@ -169,7 +169,7 @@ class AuthController extends Controller
             return response()->json($validator->errors()->toJson(), 400);
         }
 
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::attempt($request->only('no_hp', 'password'))) {
             return response()->json([
                 'status_code' => 401,
                 'message' => 'Unauthorized'
@@ -183,7 +183,7 @@ class AuthController extends Controller
             ]);
         }
 
-        $user = User::where('email', $request->email)->firstOrFail();
+        $user = User::where('no_hp', $request->no_hp)->firstOrFail();
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
