@@ -113,13 +113,18 @@ class DaftarAlamatController extends Controller
     {
         $daftarAlamat = DaftarAlamat::where('alamat_id', $alamatID)->first();
         $otherAlamat = DaftarAlamat::where('user_id', $daftarAlamat->user_id)->update(['isActive' => false]);
+
         $daftarAlamat->isActive = true;
         $daftarAlamat->save();
+
         $biodata = Biodata::where('user_id', $daftarAlamat->user_id)->first();
         $biodata->alamat_id = $alamatID;
         $biodata->save();
+
         return response()->json([
-            'message' => 'alamat berhasil diaktifkan'
+            'message' => 'alamat berhasil diaktifkan',
+            'alamat_id' => $biodata->alamat_id,
+            'alamat' => $daftarAlamat
         ], 200);
     }
 }
