@@ -13,6 +13,12 @@ use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\DaftarAlamatController;
+use App\Http\Controllers\PosCategoryController;
+use App\Http\Controllers\PosInventoryController;
+use App\Http\Controllers\PosMainController;
+use App\Http\Controllers\PosProfileController;
+use App\Models\PosInventory;
+use App\Models\PosInventoryLog;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,4 +134,20 @@ Route::prefix('berita')->group(function () {
 Route::prefix('banner')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::get('/{id}', [BannerController::class, 'show']);
+});
+
+Route::prefix('pos')->group(function () {
+    Route::prefix('inventory')->group(function () {
+        Route::get('/', [PosInventoryController::class, 'getUserInventory']);
+        Route::get('/products', [PosInventoryController::class, 'getUserProducts']);
+    });
+    Route::prefix('category')->group(function () {
+        Route::get('/', [PosCategoryController::class, 'getUserCategory']);
+    });
+    Route::prefix('profile')->group(function () {
+        Route::get('/', [PosProfileController::class, 'getUserProfile']);
+    });
+    Route::prefix('employee')->group(function () {
+        Route::get('/', [PosMainController::class, 'getUserEmployee']);
+    });
 });
