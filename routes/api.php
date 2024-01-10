@@ -140,6 +140,10 @@ Route::prefix('pos')->group(function () {
     Route::prefix('inventory')->group(function () {
         Route::get('/', [PosInventoryController::class, 'getUserInventory']);
         Route::get('/products', [PosInventoryController::class, 'getUserProducts']);
+        Route::get('/product/{id}', [PosInventoryController::class, 'getSingleProduct']);
+        Route::post('/product/create', [PosInventoryController::class, 'createNewProduct']);
+        Route::post('/product/update/{id}', [PosInventoryController::class, 'updateProduct']);
+        Route::get('/product/delete/{id}', [PosInventoryController::class, 'deleteProduct']);
     });
     Route::prefix('category')->group(function () {
         Route::get('/', [PosCategoryController::class, 'getUserCategory']);
