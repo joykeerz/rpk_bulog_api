@@ -43,7 +43,7 @@ class PosInventoryController extends Controller
 
     public function createNewProduct(Request $request)
     {
-        return response()->json($request->input(), 200);
+        // return response()->json($request->input(), 200);
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
