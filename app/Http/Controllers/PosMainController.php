@@ -10,7 +10,7 @@ class PosMainController extends Controller
     //
     public function getUserEmployee()
     {
-        $employee = PosEmployee::where('profile_id', 1)->first();
+        $employee = PosEmployee::where('profile_id', 1)->get();
 
         if (empty($employee)) {
             return response()->json([

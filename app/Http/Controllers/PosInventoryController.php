@@ -41,7 +41,7 @@ class PosInventoryController extends Controller
         return response()->json($products, 200);
     }
 
-    public function createNewProduct(Request $request)
+    public function createNewSingleProduct(Request $request)
     {
         // return response()->json($request->input(), 200);
         if (!$request->input()) {
@@ -82,7 +82,7 @@ class PosInventoryController extends Controller
         return response()->json($product, 200);
     }
 
-    public function updateProduct(Request $request, $productID)
+    public function updateSingleProduct(Request $request, $productID)
     {
         $product = PosProduct::where('profile_id', 1)->where('id', $request->product_id)->first();
         if (empty($product)) {
@@ -137,7 +137,7 @@ class PosInventoryController extends Controller
         return response()->json($product, 200);
     }
 
-    public function deleteProduct($productID)
+    public function deleteSingleProduct($productID)
     {
         $product = PosProduct::where('profile_id', 1)->where('id', $productID)->first();
         if (empty($product)) {
