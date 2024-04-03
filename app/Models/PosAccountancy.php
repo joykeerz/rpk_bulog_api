@@ -8,5 +8,4 @@ use Illuminate\Database\Eloquent\Model;
 class PosAccountancy extends Model
 {
     use HasFactory;
-    protected $guarded = ['id'];
 }

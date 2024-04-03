@@ -9,12 +9,23 @@ class Alamat extends Model
 {
     use HasFactory;
     protected $table = 'alamat';
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'id',
+        'jalan',
+        'jalan_ext',
+        'blok',
+        'rt',
+        'rw',
+        'provinsi',
+        'kota_kabupaten',
+        'kecamatan',
+        'kelurahan',
+        'negara',
+        'kode_pos',
+        'external_alamat_id',
+    ];
+    // protected $guarded = ['id'];
 
-    public function daftarAlamat()
-    {
-        return $this->hasMany(DaftarAlamat::class);
-    }
     // public function biodata()
     // {
     //     return $this->belongsTo(Biodata::class);

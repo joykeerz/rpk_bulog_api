@@ -5,9 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DaftarAlamat extends Model
+class OrderLine extends Model
 {
     use HasFactory;
     protected $guarded = ['id'];
-    protected $table = "daftar_alamat";
+
+    public function salesOrder()
+    {
+        return $this->belongsTo(SalesOrder::class, 'sales_order_id');
+    }
 }

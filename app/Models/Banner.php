@@ -15,9 +15,4 @@ class Banner extends Model
         'gambar_banner',
         'external_banner_id'
     ];
-    protected $hidden = [
-        'external_banner_id',
-        // 'created_at',
-        // 'updated_at'
-    ];
 }
