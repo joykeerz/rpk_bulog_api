@@ -54,7 +54,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->limit(20)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -108,7 +108,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('produk.kategori_id', '=', $id)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -165,7 +165,7 @@ class StockController extends Controller
             )
             ->where('produk.kategori_id', '=', $id)
             ->where('gudang.id', '=', $gid)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -207,7 +207,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('gudang.id', $id)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -248,7 +248,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('produk.id', '=', $id)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -349,7 +349,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('produk.nama_produk', 'ilike', '%' . $request->nama_produk . '%')
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([
@@ -400,7 +400,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('kategori.nama_kategori', 'ilike', '%' . $request->nama_kategori . '%')
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
             return response()->json([

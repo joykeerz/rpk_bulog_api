@@ -18,7 +18,7 @@ class GudangController extends Controller
             ->join('alamat', 'gudang.alamat_id', '=', 'alamat.id')
             ->select('gudang.*', 'alamat.*', 'gudang.id as gid', 'alamat.id as aid', 'gudang.created_at as cat')
             ->orderBy('cat', 'desc')
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($gudang)) {
             return response()->json([

@@ -19,7 +19,7 @@ class ProductController extends Controller
             ->select('produk.*', 'kategori.*', 'kategori.id as kid', 'produk.id as pid', 'produk.created_at as cat')
             ->orderBy('cat', 'desc')
             // ->paginate(10);
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($products)) {
             return response()->json([
@@ -73,7 +73,7 @@ class ProductController extends Controller
             ->select('produk.*', 'kategori.*', 'kategori.id as kid', 'produk.id as pid', 'produk.created_at as cat')
             ->where('kategori.id', '=', $id)
             ->orderBy('cat', 'desc')
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($products)) {
             return response()->json([
@@ -102,7 +102,7 @@ class ProductController extends Controller
             ->where('produk.nama_produk', 'like', "%" . $search . "%")
             ->orWhere('kategori.nama_kategori', 'like', "%" . $search . "%")
             ->orderBy('produk.created_at', 'desc')
-            ->get();
+            ->simplePaginate(10);
 
         if (!$products) {
             return response()->json([
@@ -130,7 +130,7 @@ class ProductController extends Controller
             ->where('kategori.nama_kategori', 'like', "%" . $search . "%")
             // ->latest()
             ->orderBy('cat', 'desc')
-            ->get();
+            ->simplePaginate(10);
 
         if (!$categories) {
             return response()->json([
