@@ -35,9 +35,9 @@ class CartController extends Controller
                 'carts.subtotal_detail',
                 'gudang.nama_gudang'
             )
-            ->get();
+            ->simplePaginate(15);
 
-        if (empty($cart) || $cart->count() < 1 || !$cart) {
+        if (empty($cart)) {
             return response()->json([
                 'data' => $cart
             ], 200);
@@ -83,7 +83,6 @@ class CartController extends Controller
             return response()->json([
                 'data' => $currentCart
             ], 200);
-
         } else {
             $cart = new Cart;
             $cart->user_id = Auth::user()->id;

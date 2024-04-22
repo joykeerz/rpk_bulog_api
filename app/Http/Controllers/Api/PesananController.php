@@ -27,7 +27,7 @@ class PesananController extends Controller
             ->select('detail_pesanan.*', 'produk.*', 'detail_pesanan.id as did', 'produk.id as prid', 'detail_pesanan.created_at as cat')
             ->where('detail_pesanan.pesanan_id', '=', $pesanan->pid)
             ->orderBy('cat', 'desc')
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($pesanan)) {
             return response()->json([

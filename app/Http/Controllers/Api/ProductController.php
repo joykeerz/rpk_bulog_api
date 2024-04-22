@@ -34,7 +34,7 @@ class ProductController extends Controller
 
     public function getCategories()
     {
-        $categories = Kategori::all();
+        $categories = Kategori::all()->simplePaginate(15);
 
         if (empty($categories)) {
             return response()->json([
@@ -100,7 +100,7 @@ class ProductController extends Controller
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->select('produk.*', 'kategori.*', 'kategori.id as kid', 'produk.id as pid', 'produk.created_at as cat')
             ->where('produk.nama_produk', 'like', "%" . $search . "%")
-            ->orWhere('kategori.nama_kategori', 'like', "%" . $search . "%")
+            ->orWhere('kategori.nama_kategori', 'ilike', "%" . $search . "%")
             ->orderBy('produk.created_at', 'desc')
             ->simplePaginate(10);
 

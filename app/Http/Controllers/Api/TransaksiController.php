@@ -234,7 +234,7 @@ class TransaksiController extends Controller
             )
             ->orderBy('cat', 'desc')
             ->where('pesanan.user_id', '=', $id)
-            ->get();
+            ->simplePaginate(10);
 
         if (empty($transaksi)) {
             return response()->json([

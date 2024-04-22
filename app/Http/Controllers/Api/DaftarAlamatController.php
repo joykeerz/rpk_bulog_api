@@ -15,7 +15,7 @@ class DaftarAlamatController extends Controller
 {
     public function getDaftarAlamatUser()
     {
-        $daftarAlamat = DaftarAlamat::with(['alamat'])->where('user_id', Auth::user()->id)->get();
+        $daftarAlamat = DaftarAlamat::with(['alamat'])->where('user_id', Auth::user()->id)->simplePaginate(15);
         return response()->json($daftarAlamat, 200);
     }
 

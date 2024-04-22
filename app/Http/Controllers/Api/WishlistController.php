@@ -32,9 +32,9 @@ class WishlistController extends Controller
                 'pajak.persentase_pajak',
                 'gudang.nama_gudang'
             )
-            ->get();
+            ->simplePaginate(15);
 
-        if (empty($wishlist) || $wishlist->count() < 1 || !$wishlist) {
+        if (empty($wishlist)) {
             return response()->json([
                 'data' => $wishlist
             ], 200);
