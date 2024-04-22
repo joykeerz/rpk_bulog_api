@@ -13,6 +13,7 @@ use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\DaftarAlamatController;
+use App\Http\Controllers\Api\PaymentOptionController;
 use App\Http\Controllers\PosCategoryController;
 use App\Http\Controllers\PosInventoryController;
 use App\Http\Controllers\PosMainController;
@@ -134,6 +135,11 @@ Route::prefix('berita')->group(function () {
 Route::prefix('banner')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::get('/{id}', [BannerController::class, 'show']);
+});
+
+Route::prefix('payment-option')->group(function () {
+    Route::get('/{id}', [PaymentOptionController::class, 'getPaymentOptionById']);
+    Route::get('/', [PaymentOptionController::class, 'getPaymentOptionByAuth']);
 });
 
 // Route::prefix('pos')->group(function () {
