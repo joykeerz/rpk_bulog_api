@@ -34,7 +34,7 @@ class ProductController extends Controller
 
     public function getCategories()
     {
-        $categories = Kategori::all()->simplePaginate(15);
+        $categories = Kategori::simplePaginate(15);
 
         if (empty($categories)) {
             return response()->json([

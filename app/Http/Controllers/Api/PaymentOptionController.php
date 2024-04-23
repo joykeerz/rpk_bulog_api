@@ -35,7 +35,7 @@ class PaymentOptionController extends Controller
         return response()->json($paymentOptions, 200);
     }
 
-    public function getPaymentOptionByAuth()
+    public function getPaymentOptionByUser()
     {
         $comapnyId = Biodata::where('user_id', Auth::user()->id)->select('company_id')->first();
         $paymentOptions = DB::table('payment_options')
@@ -57,6 +57,6 @@ class PaymentOptionController extends Controller
             ], '404');
         };
 
-        return response()->json($paymentOptions,200);
+        return response()->json($paymentOptions, 200);
     }
 }
