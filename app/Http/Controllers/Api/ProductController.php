@@ -18,7 +18,6 @@ class ProductController extends Controller
             ->join('kategori', 'produk.kategori_id', '=', 'kategori.id')
             ->select('produk.*', 'kategori.*', 'kategori.id as kid', 'produk.id as pid', 'produk.created_at as cat')
             ->orderBy('cat', 'desc')
-            // ->paginate(10);
             ->simplePaginate(10);
 
         if (empty($products)) {

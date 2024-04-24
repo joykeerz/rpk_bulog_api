@@ -94,6 +94,7 @@ class AuthController extends Controller
         }
 
         $user = User::create([
+            'id' => DB::table('users')->max('id') + 1,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -128,6 +129,7 @@ class AuthController extends Controller
         };
 
         $biodata =  Biodata::create([
+            'id' => DB::table('biodata')->max('id') + 1,
             'user_id' => $user->id,
             'alamat_id' => $alamat->id,
             'nama_rpk' => $request->nama_rpk,
@@ -145,8 +147,8 @@ class AuthController extends Controller
         $token = $user->createToken('auth_token')->plainTextToken;
 
         return response()->json([
-            'data' => [$user, $alamat],
             'status_code' => 200,
+            'data' => [$user, $alamat],
             'access_token' => $token,
             'token_type' => 'Bearer'
         ]);

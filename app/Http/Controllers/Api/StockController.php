@@ -50,6 +50,7 @@ class StockController extends Controller
                 'pajak.jenis_pajak',
                 'pajak.persentase_pajak',
                 'gudang.nama_gudang',
+                'gudang.id as gudang_id',
                 'stok_etalase.is_active',
                 'stok_etalase.updated_at',
             )
