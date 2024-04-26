@@ -79,6 +79,7 @@ class AuthController extends Controller
 
         $filePath = 'none';
         if ($request->hasFile('ktp_img')) {
+            /// Alternate store filepath method
             // $filePath = $request->file('ktp_img')->store('images/ktp', 'public');
             $url = env('API_DASHBOARD_URL') . '/mobile/receive-ktp-image';
             $image = $request->file('ktp_img');
@@ -132,9 +133,11 @@ class AuthController extends Controller
             'id' => DB::table('biodata')->max('id') + 1,
             'user_id' => $user->id,
             'alamat_id' => $alamat->id,
+            'kode_customer' => $request->kode_customer,
+            'branch_id' => 213,
+            'company_id' => 115,
             'nama_rpk' => $request->nama_rpk,
             'no_ktp' => $request->no_ktp,
-            'kode_customer' => $request->kode_customer,
             'ktp_img' => $filePath,
         ]);
 
