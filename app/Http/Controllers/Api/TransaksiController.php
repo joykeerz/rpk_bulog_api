@@ -3,8 +3,16 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\DetailPesanan;
+use App\Models\PosCategory;
+use App\Models\PosDiscount;
+use App\Models\PosInventory;
+use App\Models\PosInventoryLog;
+use App\Models\PosProduct;
+use App\Models\Produk;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -20,7 +28,7 @@ class TransaksiController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'tipe_pembayaran' => 'required',
+            'payment_option_id' => 'required',
             'status_pembayaran' => 'required',
             'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
@@ -34,7 +42,7 @@ class TransaksiController extends Controller
             'kode_company' => 'required',
             'nomor_pembayaran' => 'required'
         ], [
-            'tipe_pembayaran.required' => 'Tipe Pembayaran tidak boleh kosong',
+            'payment_option_id.required' => 'payment option tidak boleh kosong',
             'status_pembayaran.required' => 'Status Pembayaran tidak boleh kosong',
             'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
             'subtotal_pengiriman.required' => 'Subtotal Pengiriman tidak boleh kosong',
@@ -57,9 +65,12 @@ class TransaksiController extends Controller
 
         $transaksi = new Transaksi;
         $transaksi->pesanan_id = $id;
-        $transaksi->tipe_pembayaran = $request->tipe_pembayaran;
+        $transaksi->tipe_pembayaran = DB::table('payment_options')
+            ->where('payment_options.id', $request->payment_option_id)
+            ->join('payment_types', 'payment_types.id', 'payment_options.payment_type_id')
+            ->value('type_name')
+            ->first();
         $transaksi->status_pembayaran = $request->status_pembayaran;
-        $transaksi->diskon = 0;
         $transaksi->subtotal_produk = $request->subtotal_produk;
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
         $transaksi->total_qty = $request->total_qty;
@@ -72,6 +83,7 @@ class TransaksiController extends Controller
         $transaksi->dpp_dibebaskan = $request->dpp_dibebaskan;
         $transaksi->ppn_dibebaskan = $request->ppn_dibebaskan;
         $transaksi->nomor_pembayaran = $request->nomor_pembayaran;
+        $transaksi->payment_option_id = $request->payment_option_id;
         $transaksi->save();
 
         if (!$transaksi) {
@@ -80,10 +92,7 @@ class TransaksiController extends Controller
             ], 500);
         }
 
-        return response()->json([
-            'message' => 'Transaksi berhasil dibuat',
-            'data' => $transaksi
-        ], 201);
+        $this->addToPos($transaksi->id);
     }
 
     public function getTransaksi($id)
@@ -245,5 +254,70 @@ class TransaksiController extends Controller
         return response()->json([
             'data' => $transaksi,
         ], 200);
+    }
+
+    public function addToPos($id)
+    {
+        $transaksi = Transaksi::find($id);
+        $detailPesanan = DetailPesanan::where('pesanan_id', $transaksi->pesanan_id)->get();
+        $profileId = Auth::user()->posProfile->id;
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        try {
+            foreach ($detailPesanan as $detail) {
+                $productInfo = Produk::with('kategori')->find($detail->produk_id);
+
+                $posCategory = PosCategory::firstOrNew(['category_name' => $productInfo->kategori->nama_kategori]);
+                $posCategory->fill([
+                    'profile_id' => $profileId,
+                    'category_desc' => $productInfo->kategori->deskripsi_kategori,
+                    'is_from_bulog' => true,
+                ])->save();
+
+                $posProduct = PosProduct::firstOrNew(['product_code' => $productInfo->kode_produk]);
+                $posProduct->fill([
+                    'profile_id' => $profileId,
+                    'category_id' => $posCategory->id,
+                    'product_name' => $productInfo->nama_produk,
+                    'product_desc' => $productInfo->deskripsi_produk,
+                    'is_from_bulog' => true,
+                ])->save();
+
+                $posInventory = PosInventory::updateOrCreate(
+                    ['product_id' => $posProduct->id],
+                    [
+                        'discount_id' => PosDiscount::where('profile_id', $profileId)
+                            ->where('discount_name', 'Tidak Diskon')
+                            ->value('id'),
+                        'quantity' => DB::raw('quantity + ' . $detail->qty),
+                        'price' => $detail->harga,
+                        'is_from_bulog' => true
+                    ]
+                );
+
+                $posInventoryLog = new PosInventoryLog();
+                $posInventoryLog->fill([
+                    'pos_inventory_id' => $posInventory->id,
+                    'kode_transaksi' => $transaksi->kode_transaksi,
+                    'quantity' => $detail->qty,
+                    'io_status' => 'in',
+                    'io_date' => now(),
+                ])->save();
+            }
+
+            // Commit the transaction if everything is successful
+            DB::commit();
+
+            return response()->json("Transaksi Berhasil", 200);
+        } catch (\Exception $e) {
+            // Rollback the transaction if an error occurs
+            DB::rollback();
+            return response()->json("Gagal menyimpan $e", 200);
+
+            // Handle or log the exception
+            // You can throw the exception again if you want to propagate it
+        }
     }
 }

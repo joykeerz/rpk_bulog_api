@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DetailPesanan;
 use App\Models\Pesanan;
 use App\Models\Stok;
+use App\Models\StokEtalase;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -57,6 +58,7 @@ class PesananController extends Controller
             'alamat_id' => 'required',
             'kurir_id' =>   'required',
             'gudang_id' =>   'required',
+            'nama_penerima' =>   'required',
         ]);
 
         if ($validator->fails()) {
@@ -71,6 +73,7 @@ class PesananController extends Controller
             'kurir_id' => $request->kurir_id,
             'gudang_id' => $request->gudang_id,
             'status_pemesanan' => 'belum dibayar',
+            'nama_penerima' => $request->nama_penerima
         ]);
 
         if (!$pesanan) {
@@ -103,7 +106,7 @@ class PesananController extends Controller
                 'produk_id' => 'required',
                 'qty' => 'required',
                 'harga' => 'required',
-                'stok_id' => 'required',
+                'stok_etalase_id' => 'required',
                 'dpp' => 'required',
                 'ppn' => 'required',
                 'jenis_pajak' => 'required',
@@ -129,13 +132,13 @@ class PesananController extends Controller
                 'subtotal_detail' => $inputProduct[$i]['subtotal_detail'],
             ]);
 
-            $currentStock = Stok::find($inputProduct[$i]['stok_id']);
+            $currentStock = StokEtalase::where('id', $inputProduct[$i]['stok_etalase_id']);
             if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $inputProduct[$i]['qty']) {
                 return response()->json([
-                    'error' => "Stok id $currentStock->produk_id tidak mencukupi"
+                    'error' => "Stok $currentStock->produk_id tidak mencukupi"
                 ], 400);
             }
-            $currentStock->decrement('jumlah_stok', $inputProduct[$i]['qty']);
+            // $currentStock->decrement('jumlah_stok', $inputProduct[$i]['qty']);
             $currentStock->save();
             $total += $inputProduct[$i]['subtotal_detail'];
         }

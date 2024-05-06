@@ -44,4 +44,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function posProfile()
+    {
+        return $this->hasOne(PosProfile::class, 'user_id');
+    }
 }

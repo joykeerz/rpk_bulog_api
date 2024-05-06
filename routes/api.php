@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\BannerController;
 use App\Http\Controllers\Api\BeritaController;
+use App\Http\Controllers\Api\BranchController;
 use App\Http\Controllers\Api\GudangController;
 use App\Http\Controllers\Api\PesananController;
 use App\Http\Controllers\Api\ProductController;
@@ -45,6 +46,7 @@ Route::get('/check/connection', function () {
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+
 Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
@@ -73,6 +75,31 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/add', [DaftarAlamatController::class, 'addAlamat']);
         Route::delete('/remove/{id}', [DaftarAlamatController::class, 'removeAlamat']);
         Route::get('/toggle/{id}', [DaftarAlamatController::class, 'toggleAlamat']);
+    });
+
+    Route::prefix('payment-option')->group(function () {
+        Route::get('/{id}', [PaymentOptionController::class, 'getPaymentOptionById']);
+        Route::get('/', [PaymentOptionController::class, 'getPaymentOptionByAuth']);
+    });
+
+    ///Pesanan Routes
+    Route::prefix('pesanan')->group(function () {
+        Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
+        Route::post('/create', [PesananController::class, 'createPesanan']);
+        Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
+        Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
+    });
+
+    ///transaksi Routes
+    Route::prefix('transaksi')->group(function () {
+        Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
+        Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
+        Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
+    });
+
+    Route::prefix('user')->group(function () {
+        Route::post('/change/branch', [BranchController::class, 'setBranchCompany']);
+        Route::get('get/branch', [BranchController::class, 'getBranchCompany']);
     });
 });
 
@@ -111,21 +138,6 @@ Route::prefix('stock')->group(function () {
     Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
 });
 
-///Pesanan Routes
-Route::prefix('pesanan')->group(function () {
-    Route::get('/user/{id}', [PesananController::class, 'getPesananUser']);
-    Route::post('/create', [PesananController::class, 'createPesanan']);
-    Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
-    Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
-});
-
-///transaksi Routes
-Route::prefix('transaksi')->group(function () {
-    Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
-    Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
-    Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
-});
-
 ///berita Routes
 Route::prefix('berita')->group(function () {
     Route::get('/', [BeritaController::class, 'index']);
@@ -135,9 +147,4 @@ Route::prefix('berita')->group(function () {
 Route::prefix('banner')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::get('/{id}', [BannerController::class, 'show']);
-});
-
-Route::prefix('payment-option')->group(function () {
-    Route::get('/{id}', [PaymentOptionController::class, 'getPaymentOptionById']);
-    Route::get('/', [PaymentOptionController::class, 'getPaymentOptionByAuth']);
 });
