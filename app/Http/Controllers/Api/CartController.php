@@ -14,18 +14,21 @@ class CartController extends Controller
     public function getUserCart()
     {
         $cart = DB::table('carts')
-            ->join('stok', 'carts.stok_id', 'stok.id')
+            ->join('stok_etalase', 'stok_etalase.id', 'carts.stok_id')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('prices', 'prices.id', 'stok.id')
             ->join('gudang', 'carts.gudang_id', 'gudang.id')
             ->join('produk', 'stok.produk_id', 'produk.id')
             ->join('pajak', 'produk.pajak_id', 'pajak.id')
             ->where('carts.user_id', '=', Auth::user()->id)
             ->select(
-                'carts.id as cid',
-                'stok.id as sid',
-                'produk.id as pid',
-                'gudang.id as gid',
+                'carts.id as cart_id',
+                'stok.id as stok_id',
+                'stok_etalase.id as stok_etalase_id',
+                'produk.id as product_id',
+                'gudang.id as gudang_id',
                 'produk.nama_produk as nama',
-                'stok.harga_stok as harga',
+                'prices.price_value as harga',
                 'carts.quantity',
                 'produk.produk_file_path as image',
                 'carts.dpp',
@@ -50,7 +53,6 @@ class CartController extends Controller
 
     public function createUserCart(Request $request)
     {
-        // return request()->input();
         if (!$request->input()) {
             return response()->json([
                 'error' => 'please insert data'
@@ -58,12 +60,13 @@ class CartController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'stok_id' => 'required',
+            'stok_id' => 'required',  //ini stok etalase id
             'gudang_id' => 'required',
             'quantity' => 'required',
-            'dpp' => 'required',
-            'ppn' => 'required',
-            'subtotal_detail' => 'required',
+            // 'dpp' => 'required',
+            // 'ppn' => 'required',
+            // 'subtotal_detail' => 'required',
+            'harga' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -73,13 +76,37 @@ class CartController extends Controller
         }
 
         $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
+        $pajakInfo = DB::table('stok_etalase')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('pajak', 'pajak.id', 'produk.pajak_id')
+            ->select('pajak.jenis_pajak', 'pajak.persentase_pajak')
+            ->where('stok_etalase.id', $request->stok_id)
+            ->first();
+        $dpp = 0;
+        $ppn = 0;
+        $subtotal = $request->quantity * $request->harga;
+
+        if (strtolower($pajakInfo->jenis_pajak) === 'include') {
+            $dpp = $subtotal * (100 / (100 + $pajakInfo->persentase_pajak));
+            $ppn = $dpp * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp + $ppn;
+        } else if (strtolower($pajakInfo->jenis_pajak) === 'exclude') {
+            $dpp = $subtotal;
+            $ppn = $dpp * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp + $ppn;
+        } else if (strtolower($pajakInfo->jenis_pajak) === 'dibebaskan') {
+            $dpp = $subtotal;
+            $ppn = $subtotal * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp;
+        }
+
         if ($currentCart) {
             $currentCart->quantity += $request->quantity;
-            $currentCart->dpp += $request->dpp;
-            $currentCart->ppn += $request->ppn;
-            $currentCart->subtotal_detail += $request->subtotal_detail;
+            $currentCart->dpp += $dpp;
+            $currentCart->ppn += $ppn;
+            $currentCart->subtotal_detail += $subtotal;
             $currentCart->save();
-
             return response()->json([
                 'data' => $currentCart
             ], 200);
@@ -89,21 +116,85 @@ class CartController extends Controller
             $cart->stok_id = $request->stok_id;
             $cart->gudang_id = $request->gudang_id;
             $cart->quantity = $request->quantity;
-            $cart->dpp = $request->dpp;
-            $cart->ppn = $request->ppn;
-            $cart->subtotal_detail = $request->subtotal_detail;
+            $cart->dpp = $dpp;
+            $cart->ppn = $ppn;
+            $cart->subtotal_detail = $subtotal;
             $cart->save();
         }
 
         if (!$cart) {
             return response()->json([
-                'error' => "failed to add new wishlist"
+                'error' => "failed to add new cart"
             ], 200);
         };
 
         return response()->json([
             'data' => $cart
         ], 200);
+    }
+
+    public function updateUserCart(Request $request, $id)
+    {
+
+        if (!$request->input()) {
+            return response()->json([
+                'error' => 'please insert data'
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'quantity' => 'required',
+            'harga' => 'required'
+            // 'dpp' => 'required',
+            // 'ppn' => 'required',
+            // 'subtotal_detail' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 200);
+        }
+
+        $cart = Cart::find($id);
+        if (!$cart) {
+            return response()->json([
+                'error' => 'cart not found'
+            ], 404);
+        }
+
+        $dpp = 0;
+        $ppn = 0;
+        $pajakInfo = DB::table('stok_etalase')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('pajak', 'pajak.id', 'produk.pajak_id')
+            ->select('pajak.jenis_pajak', 'pajak.persentase_pajak')
+            ->where('stok_etalase.id', $cart->stok_id)
+            ->first();
+        $subtotal = $request->quantity * $request->harga;
+
+        if (strtolower($pajakInfo->jenis_pajak) === 'include') {
+            $dpp = $subtotal * (100 / (100 + $pajakInfo->persentase_pajak));
+            $ppn = $dpp * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp + $ppn;
+        } else if (strtolower($pajakInfo->jenis_pajak) === 'exclude') {
+            $dpp = $subtotal;
+            $ppn = $dpp * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp + $ppn;
+        } else if (strtolower($pajakInfo->jenis_pajak) === 'dibebaskan') {
+            $dpp = $subtotal;
+            $ppn = $subtotal * ($pajakInfo->persentase_pajak / 100);
+            $subtotal = $dpp;
+        }
+
+        $cart->quantity = $request->quantity;
+        $cart->dpp = $dpp;
+        $cart->ppn = $ppn;
+        $cart->subtotal_detail = $subtotal;
+        $cart->save();
+
+        return response()->json('cart updated', 200);
     }
 
     public function removeUserCart($id)
@@ -121,6 +212,16 @@ class CartController extends Controller
             ], '404');
         };
 
+        $cart->delete();
+        return response()->json([
+            'message' => 'cart removed',
+            'data' => $cart
+        ], 200);
+    }
+
+    public function removeAllUserCart()
+    {
+        $cart = Cart::where('user_id', Auth::user()->id);
         $cart->delete();
         return response()->json([
             'message' => 'cart removed',
@@ -184,6 +285,24 @@ class CartController extends Controller
 
         return response()->json([
             'message' => 'cart cleared',
+        ], 200);
+    }
+
+    function countCartQuantity()
+    {
+        $userId = Auth::user()->id;
+        $cartItems = Cart::where('user_id', $userId)->get();
+        $totalQuantity = 0;
+        $totalSubtotal = 0;
+
+        foreach ($cartItems as $item) {
+            $totalQuantity += $item->quantity;
+            $totalSubtotal += $item->subtotal_detail;
+        }
+
+        return response()->json([
+            'total_quantity_cart' => $totalQuantity,
+            'total_subtotal' => $totalSubtotal
         ], 200);
     }
 }

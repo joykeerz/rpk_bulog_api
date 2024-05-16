@@ -92,4 +92,20 @@ class GudangController extends Controller
             'data' => $kodeCompany,
         ], 200);
     }
+
+    public function searchGudang(Request $request)
+    {
+        $gudang = DB::table('gudang')
+            ->where('gudang.nama_gudang', 'ilike', '%' . $request->nama_gudang . '%')
+            ->limit(10)
+            ->get();
+
+        if (empty($gudang)) {
+            return response()->json([
+                'error' => 'gudang not found'
+            ], '404');
+        };
+
+        return response()->json($gudang, 200);
+    }
 }

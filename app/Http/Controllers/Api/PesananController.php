@@ -5,11 +5,19 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\DetailPesanan;
 use App\Models\Pesanan;
+use App\Models\PosCategory;
+use App\Models\PosDiscount;
+use App\Models\PosInventory;
+use App\Models\PosInventoryLog;
+use App\Models\PosProduct;
+use App\Models\Produk;
 use App\Models\Stok;
 use App\Models\StokEtalase;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class PesananController extends Controller
@@ -59,6 +67,7 @@ class PesananController extends Controller
             'kurir_id' =>   'required',
             'gudang_id' =>   'required',
             'nama_penerima' =>   'required',
+            'created_at' =>   'required',
         ]);
 
         if ($validator->fails()) {
@@ -72,8 +81,9 @@ class PesananController extends Controller
             'alamat_id' => $request->alamat_id,
             'kurir_id' => $request->kurir_id,
             'gudang_id' => $request->gudang_id,
-            'status_pemesanan' => 'belum dibayar',
-            'nama_penerima' => $request->nama_penerima
+            'status_pemesanan' => 'menunggu verifikasi',
+            'nama_penerima' => $request->nama_penerima,
+            'created_at' => $request->created_at
         ]);
 
         if (!$pesanan) {
@@ -154,6 +164,96 @@ class PesananController extends Controller
         return response()->json([
             'message' => 'Detail pesanan berhasil dibuat',
             'data' => $detailPesanan
-        ], 201);
+        ], 200);
+    }
+
+    public function changeStatusDiterima($id)
+    {
+        $pesanan = Pesanan::find($id);
+        $pesanan->status_pemesanan = 'diterima';
+        $pesanan->save();
+
+        $transaksi = Transaksi::where('pesanan_id', $id)->first();
+        $detailPesanan = DetailPesanan::where('pesanan_id', $transaksi->pesanan_id)->get();
+        $profileId = Auth::user()->posProfile->id;
+
+        // if (!$profileId) {
+        //     return response()->json('user tidak memiliki akun PoS. tidak menambahkan inventory PoS', 200);
+        // }
+
+        // Start a database transaction
+        DB::beginTransaction();
+
+        foreach ($detailPesanan as $detail) {
+            $productInfo = Produk::with('kategori')->find($detail->produk_id);
+
+            if ($productInfo) {
+                Log::info('$productInfo ditemukan');
+            }
+
+            $posCategory = PosCategory::firstOrNew(['category_name' => $productInfo->kategori->nama_kategori]);
+            $posCategory->fill([
+                'profile_id' => $profileId,
+                'category_desc' => $productInfo->kategori->deskripsi_kategori,
+                'is_from_bulog' => true,
+            ])->save();
+
+            if ($posCategory) {
+                Log::info('$posCategory berhasil dibuat');
+            }
+
+            $posProduct = PosProduct::firstOrNew(['product_code' => $productInfo->kode_produk]);
+            $posProduct->fill([
+                'profile_id' => $profileId,
+                'category_id' => $posCategory->id,
+                'product_name' => $productInfo->nama_produk,
+                'product_desc' => $productInfo->deskripsi_produk ? $productInfo->deskripsi_produk : 'tidak ada',
+                'product_image' => $productInfo->produk_file_path ? $productInfo->produk_file_path : 'images/product/default.png',
+                'is_from_bulog' => true,
+            ])->save();
+
+            if ($posProduct) {
+                Log::info('$posProduct berhasil dibuat');
+            }
+
+            $posInventory = PosInventory::updateOrCreate(
+                ['product_id' => $posProduct->id],
+                [
+                    'discount_id' => PosDiscount::where('profile_id', $profileId)
+                        ->where('discount_name', 'Tidak Diskon')
+                        ->value('id'),
+                    'price' => $detail->harga,
+                    'is_from_bulog' => true
+                ]
+            );
+            $posInventory->increment('quantity', $detail->qty);
+
+            if ($posInventory) {
+                Log::info('$posInventory berhasil dibuat/update');
+            }
+
+            $posInventoryLog = new PosInventoryLog();
+            $posInventoryLog->fill([
+                'pos_inventory' => $posInventory->id,
+                'kode_transaksi' => $transaksi->kode_transaksi,
+                'quantity' => $detail->qty,
+                'io_status' => 'in',
+                'io_date' => now(),
+            ])->save();
+
+            if ($posInventoryLog) {
+                Log::info('$posInventoryLog berhasil dibuat');
+            }
+        }
+
+        // Commit the transaction if everything is successful
+        DB::commit();
+
+        if (!$posInventoryLog) {
+            // Rollback the transaction if an error occurs
+            DB::rollback();
+            return response()->json("Gagal menyimpan", 200);
+        }
+        return response()->json("Pesanan diterima. Transaksi Berhasil", 200);
     }
 }

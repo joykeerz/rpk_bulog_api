@@ -24,6 +24,10 @@ class Alamat extends Model
         'kode_pos',
         'external_alamat_id',
     ];
+    public function daftarAlamats()
+    {
+        return $this->hasMany(DaftarAlamat::class, 'alamat_id', 'id');
+    }
     // protected $guarded = ['id'];
 
     // public function biodata()

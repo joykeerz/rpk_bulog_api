@@ -124,7 +124,7 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('produk.kategori_id', '=', $id)
-            ->where('gudang.id', '=', $gid)
+            ->where('stok.gudang_id', '=', $gid)
             ->simplePaginate(10);
 
         if (empty($stokEtalase)) {
@@ -225,25 +225,29 @@ class StockController extends Controller
     {
         $stokEtalase = DB::table('stok_etalase')
             ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('prices', 'prices.id', 'stok.id')
             ->join('produk', 'produk.id', 'stok.produk_id')
             ->join('gudang', 'gudang.id', 'stok.gudang_id')
             ->join('kategori', 'kategori.id', 'produk.kategori_id')
             ->join('satuan_unit', 'satuan_unit.id', 'produk.satuan_unit_id')
             ->join('pajak', 'pajak.id', 'produk.pajak_id')
             ->select(
-
                 'stok_etalase.id',
                 'kategori.id as kategori_id',
                 'produk.id as produk_id',
                 'produk.nama_produk',
                 'produk.produk_file_path',
+                'produk.desk_produk',
                 'stok_etalase.jumlah_stok',
                 'stok.jumlah_stok as stok_gudang',
+                'prices.price_value',
                 'kategori.nama_kategori',
                 'satuan_unit.nama_satuan',
+                'pajak.nama_pajak',
                 'pajak.jenis_pajak',
                 'pajak.persentase_pajak',
                 'gudang.nama_gudang',
+                'gudang.id as gudang_id',
                 'stok_etalase.is_active',
                 'stok_etalase.updated_at',
             )
@@ -265,6 +269,7 @@ class StockController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'nama_produk' => 'required|string',
+            'gudang_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -298,6 +303,7 @@ class StockController extends Controller
                 'stok_etalase.is_active',
                 'stok_etalase.updated_at',
             )
+            ->where('gudang.id', '=', $request->gudang_id)
             ->where('produk.nama_produk', 'ilike', '%' . $request->nama_produk . '%')
             ->simplePaginate(10);
 
@@ -313,6 +319,59 @@ class StockController extends Controller
     }
 
     public function searchStockByCategoryName(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_kategori' => 'required|string',
+            'gudang_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $stokEtalase = DB::table('stok_etalase')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('prices', 'prices.id', 'stok.id')
+            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('gudang', 'gudang.id', 'stok.gudang_id')
+            ->join('kategori', 'kategori.id', 'produk.kategori_id')
+            ->join('satuan_unit', 'satuan_unit.id', 'produk.satuan_unit_id')
+            ->join('pajak', 'pajak.id', 'produk.pajak_id')
+            ->select(
+                'stok_etalase.id',
+                'kategori.id as kategori_id',
+                'produk.id as produk_id',
+                'produk.nama_produk',
+                'produk.produk_file_path',
+                'stok_etalase.jumlah_stok',
+                'stok.jumlah_stok as stok_gudang',
+                'prices.price_value',
+                'kategori.nama_kategori',
+                'satuan_unit.nama_satuan',
+                'pajak.jenis_pajak',
+                'pajak.persentase_pajak',
+                'gudang.nama_gudang',
+                'stok_etalase.is_active',
+                'stok_etalase.updated_at',
+            )
+            ->where('gudang.id', '=', $request->gudang_id)
+            ->where('kategori.nama_kategori', 'ilike', '%' . $request->nama_kategori . '%')
+            ->simplePaginate(10);
+
+        if (empty($stokEtalase)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stokEtalase,
+        ], 200);
+    }
+
+    public function searchStockByCategoryNameNoLogin(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'nama_kategori' => 'required|string',
@@ -350,6 +409,57 @@ class StockController extends Controller
                 'stok_etalase.updated_at',
             )
             ->where('kategori.nama_kategori', 'ilike', '%' . $request->nama_kategori . '%')
+            ->simplePaginate(10);
+
+        if (empty($stokEtalase)) {
+            return response()->json([
+                'error' => "there's no data yet"
+            ], '404');
+        };
+
+        return response()->json([
+            'data' => $stokEtalase,
+        ], 200);
+    }
+
+    public function searchStockByProductNameNoLogin(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'nama_produk' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 400);
+        }
+
+        $stokEtalase = DB::table('stok_etalase')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('prices', 'prices.id', 'stok.id')
+            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('gudang', 'gudang.id', 'stok.gudang_id')
+            ->join('kategori', 'kategori.id', 'produk.kategori_id')
+            ->join('satuan_unit', 'satuan_unit.id', 'produk.satuan_unit_id')
+            ->join('pajak', 'pajak.id', 'produk.pajak_id')
+            ->select(
+                'stok_etalase.id',
+                'kategori.id as kategori_id',
+                'produk.id as produk_id',
+                'produk.nama_produk',
+                'produk.produk_file_path',
+                'stok_etalase.jumlah_stok',
+                'stok.jumlah_stok as stok_gudang',
+                'prices.price_value',
+                'kategori.nama_kategori',
+                'satuan_unit.nama_satuan',
+                'pajak.jenis_pajak',
+                'pajak.persentase_pajak',
+                'gudang.nama_gudang',
+                'stok_etalase.is_active',
+                'stok_etalase.updated_at',
+            )
+            ->where('produk.nama_produk', 'ilike', '%' . $request->nama_produk . '%')
             ->simplePaginate(10);
 
         if (empty($stokEtalase)) {

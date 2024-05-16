@@ -68,6 +68,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/update/{id}/increase', [CartController::class, 'increaseUserCart']);
         Route::post('/update/{id}/decrease', [CartController::class, 'decrementUserCart']);
         Route::post('/clear', [CartController::class, 'clearCart']);
+        Route::put('/update/item/{id}', [CartController::class, 'updateUserCart']);
+        Route::delete('/remove-all', [CartController::class, 'removeAllUserCart']);
+        Route::get('/get/quantity', [CartController::class, 'countCartQuantity']);
     });
 
     Route::prefix('daftar-alamat')->group(function () {
@@ -79,7 +82,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('payment-option')->group(function () {
         Route::get('/{id}', [PaymentOptionController::class, 'getPaymentOptionById']);
-        Route::get('/', [PaymentOptionController::class, 'getPaymentOptionByAuth']);
+        Route::get('/', [PaymentOptionController::class, 'getPaymentOptionByUser']);
     });
 
     ///Pesanan Routes
@@ -88,6 +91,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/create', [PesananController::class, 'createPesanan']);
         Route::post('/detail/create/{id}', [PesananController::class, 'createDetailPesanan']);
         Route::post('/{id}/transaksi', [TransaksiController::class, 'createTransaksi']);
+        Route::put('/{id}/status/diterima', [PesananController::class, 'changeStatusDiterima']);
     });
 
     ///transaksi Routes
@@ -95,6 +99,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/{id}', [TransaksiController::class, 'getTransaksi']);
         Route::get('/user/{id}', [TransaksiController::class, 'getTransaksiListByUser']);
         Route::get('/detail/{id}', [TransaksiController::class, 'getDetailTransaksi']);
+        Route::get('/pembayaran/{id}', [PaymentOptionController::class, 'getPaymentDetail']);
+        Route::post('/bayar/{id}', [PaymentOptionController::class, 'changeStatusPembayaran']);
     });
 
     Route::prefix('user')->group(function () {
@@ -124,6 +130,7 @@ Route::prefix('gudang')->group(function () {
     Route::get('/', [GudangController::class, 'getAllGudang']);
     Route::get('/{id}', [GudangController::class, 'getGudang']);
     Route::get('/{id}/kode', [GudangController::class, 'GetKodeCompanyByGudang']);
+    Route::post('/search', [GudangController::class, 'searchGudang']);
 });
 
 ///Stock Routes
@@ -136,6 +143,8 @@ Route::prefix('stock')->group(function () {
     Route::get('/{id}', [StockController::class, 'getSingleStock']);
     Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
     Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
+    Route::post('/search/product/nologin', [StockController::class, 'searchStockByProductNameNoLogin']);
+    Route::post('/search/category/nologin', [StockController::class, 'searchStockByCategoryNameNoLogin']);
 });
 
 ///berita Routes

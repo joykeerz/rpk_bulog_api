@@ -4,7 +4,8 @@
 		"name": "BULOG RPK API (Server)",
 		"description": "API RPK BULOG untuk app mobile",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30913448"
+		"_exporter_id": "30913448",
+		"_collection_link": "https://planetary-spaceship-829257.postman.co/workspace/Joy-RPK~737d0898-4b49-42fc-87a1-2e48869b45e9/collection/30913448-2d960534-0c07-42c1-b3a2-2074fbebb7f8?action=share&source=collection_link&creator=30913448"
 	},
 	"item": [
 		{
@@ -21,7 +22,8 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -36,12 +38,12 @@
 							"formdata": [
 								{
 									"key": "name",
-									"value": "Wijoyo Wisnu Mukti",
+									"value": "Wijoyo Wisnu Mukti 1",
 									"type": "text"
 								},
 								{
 									"key": "email",
-									"value": "wisnu.mukti10@gmail.com",
+									"value": "wisnu.mukti101@gmail.com",
 									"type": "text"
 								},
 								{
@@ -51,7 +53,7 @@
 								},
 								{
 									"key": "no_hp",
-									"value": "0895635344737",
+									"value": "08956353447371",
 									"type": "text"
 								},
 								{
@@ -116,25 +118,25 @@
 								},
 								{
 									"key": "no_ktp",
-									"value": "000022223939",
+									"value": "000022223930",
 									"type": "text"
 								},
 								{
 									"key": "kode_customer",
-									"value": "K0001",
+									"value": "K0003",
 									"type": "text"
 								},
 								{
 									"key": "ktp_img",
 									"type": "file",
-									"src": "/C:/Users/wisnu/Downloads/pngtree-ktp-residents-identity-card-id-card-free-vector-png-image_6555300.png"
+									"src": "/C:/Users/wisnu/Downloads/ktp_dummy.png"
 								}
 							]
 						},
 						"url": {
-							"raw": "{{base_url}}/api/register",
+							"raw": "{{base_url_test}}/api/register",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -142,7 +144,168 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Register New User API",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "name",
+											"value": "Wijoyo Wisnu Mukti 1",
+											"type": "text"
+										},
+										{
+											"key": "email",
+											"value": "wisnu.mukti101@gmail.com",
+											"type": "text"
+										},
+										{
+											"key": "password",
+											"value": "admin123",
+											"type": "text"
+										},
+										{
+											"key": "no_hp",
+											"value": "08956353447371",
+											"type": "text"
+										},
+										{
+											"key": "jalan",
+											"value": "Jl kumbang 5",
+											"type": "text"
+										},
+										{
+											"key": "jalan_ext",
+											"value": "Gg Batu",
+											"type": "text"
+										},
+										{
+											"key": "blok",
+											"value": "BB 10",
+											"type": "text"
+										},
+										{
+											"key": "rt",
+											"value": "4",
+											"type": "text"
+										},
+										{
+											"key": "rw",
+											"value": "2",
+											"type": "text"
+										},
+										{
+											"key": "provinsi",
+											"value": "Banten",
+											"type": "text"
+										},
+										{
+											"key": "kota_kabupaten",
+											"value": "Tangerang Selatan",
+											"type": "text"
+										},
+										{
+											"key": "kecamatan",
+											"value": "Rawa Buntu",
+											"type": "text"
+										},
+										{
+											"key": "kelurahan",
+											"value": "ciater",
+											"type": "text"
+										},
+										{
+											"key": "negara",
+											"value": "indonesia",
+											"type": "text"
+										},
+										{
+											"key": "kode_pos",
+											"value": "15310",
+											"type": "text"
+										},
+										{
+											"key": "nama_rpk",
+											"value": "RPK WIJAYA",
+											"type": "text"
+										},
+										{
+											"key": "no_ktp",
+											"value": "000022223930",
+											"type": "text"
+										},
+										{
+											"key": "kode_customer",
+											"value": "K0003",
+											"type": "text"
+										},
+										{
+											"key": "ktp_img",
+											"type": "file",
+											"src": "/C:/Users/wisnu/Downloads/ktp_dummy.png"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{base_url_test}}/api/register",
+									"host": [
+										"{{base_url_test}}"
+									],
+									"path": [
+										"api",
+										"register"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Tue, 14 May 2024 06:59:12 GMT"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "47"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=100"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status_code\": 200,\n    \"data\": [\n        {\n            \"id\": 271752,\n            \"name\": \"Wijoyo Wisnu Mukti 1\",\n            \"email\": \"wisnu.mukti101@gmail.com\",\n            \"no_hp\": \"08956353447371\",\n            \"updated_at\": \"2024-05-14T06:59:18.000000Z\",\n            \"created_at\": \"2024-05-14T06:59:13.000000Z\"\n        },\n        {\n            \"jalan\": \"Jl kumbang 5\",\n            \"jalan_ext\": \"Gg Batu\",\n            \"blok\": \"BB 10\",\n            \"rt\": \"4\",\n            \"rw\": \"2\",\n            \"provinsi\": \"Banten\",\n            \"kota_kabupaten\": \"Tangerang Selatan\",\n            \"kecamatan\": \"Rawa Buntu\",\n            \"kelurahan\": \"ciater\",\n            \"negara\": \"indonesia\",\n            \"kode_pos\": \"15310\",\n            \"updated_at\": \"2024-05-14T06:59:13.000000Z\",\n            \"created_at\": \"2024-05-14T06:59:13.000000Z\",\n            \"id\": 14678\n        }\n    ],\n    \"access_token\": \"45|HVqEHmxPoxbaRAYdpBcq1AbKP251QI4X9dn3IZFx2878d649\",\n    \"token_type\": \"Bearer\"\n}"
+						}
+					]
 				},
 				{
 					"name": "Login User API",
@@ -169,7 +332,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"no_hp\": \"0895635344737\",\r\n    \"password\": \"12345678\"\r\n}",
+							"raw": "{\r\n    \"no_hp\": \"085261089515\",\r\n    \"password\": \"12345678\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -241,7 +404,8 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
@@ -249,9 +413,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/user",
+							"raw": "{{base_url_test}}/api/user",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -259,7 +423,72 @@
 							]
 						}
 					},
-					"response": []
+					"response": [
+						{
+							"name": "Get Current User API",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{base_url_test}}/api/user",
+									"host": [
+										"{{base_url_test}}"
+									],
+									"path": [
+										"api",
+										"user"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Date",
+									"value": "Wed, 08 May 2024 01:28:32 GMT"
+								},
+								{
+									"key": "Vary",
+									"value": "Authorization"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "X-RateLimit-Limit",
+									"value": "60"
+								},
+								{
+									"key": "X-RateLimit-Remaining",
+									"value": "59"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Keep-Alive",
+									"value": "timeout=5, max=99"
+								},
+								{
+									"key": "Connection",
+									"value": "Keep-Alive"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Transfer-Encoding",
+									"value": "chunked"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status_code\": 200,\n    \"data\": {\n        \"name\": \"mahran\",\n        \"email\": \"mahran.raja@gmail.com\",\n        \"no_hp\": \"12345678\",\n        \"role_id\": 1,\n        \"company_id\": 115,\n        \"user_id\": 271745,\n        \"alamat_id\": 14673,\n        \"kode_customer\": \"12\",\n        \"nama_rpk\": \"mahran rpk\",\n        \"no_ktp\": \"107291927292\",\n        \"ktp_img\": \"images/ktp/ktp_img_1714726838.jpg\",\n        \"jalan\": \"sini\",\n        \"jalan_ext\": \"sana\",\n        \"blok\": \"12\",\n        \"rt\": \"12\",\n        \"rw\": \"12\",\n        \"provinsi\": \"ACEH\",\n        \"kota_kabupaten\": \"KABUPATEN SIMEULUE\",\n        \"kecamatan\": \"SIMEULUE TIMUR\",\n        \"kelurahan\": \"GANTING\",\n        \"negara\": \"Indonesia\",\n        \"kode_pos\": \"12\"\n    }\n}"
+						}
+					]
 				}
 			],
 			"description": "Endpoint Auth Meliputi : Login, Register, Logout, Get User Info"
@@ -509,26 +738,17 @@
 									"    pm.response.to.have.status(200);\r",
 									"});"
 								],
-								"type": "text/javascript"
+								"type": "text/javascript",
+								"packages": {}
 							}
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "3|IHS4qckbXk0wdpvqQfSgplKw6puMzxt73V4EEr1o29e607a6",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"search\": \"Ber\"\r\n}",
+							"raw": "{\r\n    \"search\": \"Baw\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -536,9 +756,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/categories/search",
+							"raw": "{{base_url_test}}/api/categories/search",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -726,6 +946,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search Gudang",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_gudang\": \"test\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url}}/api/gudang/search",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"gudang",
+								"search"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -748,14 +996,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/stock/",
+							"raw": "{{base_url_test}}/api/stock",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
-								"stock",
-								""
+								"stock"
 							]
 						}
 					},
@@ -777,7 +1024,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/stock/gudang/1",
+							"raw": "{{base_url}}/api/stock/gudang/1804",
 							"host": [
 								"{{base_url}}"
 							],
@@ -785,7 +1032,7 @@
 								"api",
 								"stock",
 								"gudang",
-								"1"
+								"1804"
 							]
 						}
 					},
@@ -827,15 +1074,15 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/stock/category/2",
+							"raw": "{{base_url_test}}/api/stock/category/56",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
 								"stock",
 								"category",
-								"2"
+								"56"
 							]
 						}
 					},
@@ -867,7 +1114,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nama_produk\": \"Beras\"\r\n}",
+							"raw": "{\r\n    \"nama_produk\": \"Beras\",\r\n    \"gudang_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -875,9 +1122,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/stock/search/product",
+							"raw": "{{base_url_test}}/api/stock/search/product",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -890,13 +1137,43 @@
 					"response": []
 				},
 				{
+					"name": "Search Stock By Product Name NoLogin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_produk\": \"Beras\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_test}}/api/stock/search/product/nologin",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"stock",
+								"search",
+								"product",
+								"nologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Search Stock By Category Name",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"nama_kategori\": \"Beras\"\r\n}",
+							"raw": "{\r\n    \"nama_kategori\": \"Beras\",\r\n    \"gudang_id\": 1\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -919,22 +1196,52 @@
 					"response": []
 				},
 				{
-					"name": "Get Stocks By Category And Gudang API",
+					"name": "Search Stock By Category Name NoLogin",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nama_kategori\": \"Beras\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "{{base_url}}/api/stock/category/2/gudang/1",
+							"raw": "{{base_url}}/api/stock/search/category/nologin",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"api",
 								"stock",
+								"search",
 								"category",
-								"2",
+								"nologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Stocks By Category And Gudang API",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/stock/category/133/gudang/1804",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"stock",
+								"category",
+								"133",
 								"gudang",
-								"1"
+								"1804"
 							]
 						}
 					},
@@ -992,7 +1299,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"user_id\": 4,\r\n    \"alamat_id\": 2,\r\n    \"kurir_id\": 2,\r\n    \"gudang_id\": 1\r\n}",
+							"raw": "{\r\n    \"user_id\": 4,\r\n    \"alamat_id\": 2,\r\n    \"kurir_id\": 2,\r\n    \"gudang_id\": 1,\r\n    \"nama_penerima\": \"Jhon Doe\",\r\n    \"created_at\": \"2024-05-13 02:34:02\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1030,7 +1337,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"produk\": [\r\n        {\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 1,\r\n            \"stok_id\": 1,\r\n            \"qty\": 2,\r\n            \"harga\": 9000, //harga barang satuan\r\n            \"dpp\": 1000,\r\n            \"ppn\": 1200,\r\n            \"jenis_pajak\": \"include\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 18000 //harga dikali quantity setelah kena pajak\r\n        },\r\n        {\r\n            \"stok_id\": 2,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 2,\r\n            \"qty\": 4,\r\n            \"harga\": 10000,\r\n            \"dpp\": 1100,\r\n            \"ppn\": 1300,\r\n            \"jenis_pajak\": \"exclude\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 22400\r\n        },\r\n        {\r\n            \"stok_id\": 3,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 3,\r\n            \"qty\": 1,\r\n            \"harga\": 7000,\r\n            \"dpp\": 900,\r\n            \"ppn\": 1000,\r\n            \"jenis_pajak\": \"non\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 7000\r\n        }\r\n    ]\r\n}",
+							"raw": "{\r\n    \"produk\": [\r\n        {\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 1,\r\n            \"stok_etalase_id\": 1,\r\n            \"qty\": 2,\r\n            \"harga\": 9000, //harga barang satuan\r\n            \"dpp\": 1000,\r\n            \"ppn\": 1200,\r\n            \"jenis_pajak\": \"include\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 18000 //harga dikali quantity setelah kena pajak\r\n        },\r\n        {\r\n            \"stok_id\": 2,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 2,\r\n            \"qty\": 4,\r\n            \"harga\": 10000,\r\n            \"dpp\": 1100,\r\n            \"ppn\": 1300,\r\n            \"jenis_pajak\": \"exclude\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 22400\r\n        },\r\n        {\r\n            \"stok_id\": 3,\r\n            \"pesanan_id\": 8,\r\n            \"produk_id\": 3,\r\n            \"qty\": 1,\r\n            \"harga\": 7000,\r\n            \"dpp\": 900,\r\n            \"ppn\": 1000,\r\n            \"jenis_pajak\": \"non\",\r\n            \"persentase_pajak\": 11,\r\n            \"subtotal_detail\": 7000\r\n        }\r\n    ]\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1048,6 +1355,27 @@
 								"detail",
 								"create",
 								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Status Pesanan Diterima",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/pesanan/26/status/diterima",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"pesanan",
+								"26",
+								"status",
+								"diterima"
 							]
 						}
 					},
@@ -1075,7 +1403,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"tipe_pembayaran\": \"transfer bank\",\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    \"diskon\": 0,\r\n    \"subtotal_produk\": 100000,\r\n    \"subtotal_pengiriman\": 25000,\r\n    \"total_qty\": 10,\r\n    \"total_dpp\": 5000,\r\n    \"total_ppn\": 4000,\r\n    \"dpp_terutang\": 2000,\r\n    \"ppn_terutang\": 1000,\r\n    \"dpp_dibebaskan\": 1100,\r\n    \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\",\r\n    \"nomor_pembayaran\": \"2380801\"\r\n}",
+							"raw": "{\r\n    \"payment_option_id\": 1, //sebelumnya namanya tipe_pembayaran\r\n    \"status_pembayaran\": \"belum dibayar\",\r\n    // \"subtotal_produk\": 100000,\r\n    \"subtotal_pengiriman\": 25000,\r\n    // \"total_qty\": 10,\r\n    // \"total_dpp\": 5000,\r\n    // \"total_ppn\": 4000,\r\n    // \"dpp_terutang\": 2000,\r\n    // \"ppn_terutang\": 1000,\r\n    // \"dpp_dibebaskan\": 1100,\r\n    // \"ppn_dibebaskan\": 2000,\r\n    \"kode_company\": \"02001\",\r\n    \"nomor_pembayaran\": \"2380801\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1129,28 +1457,18 @@
 				{
 					"name": "Get Transaksi List By User API",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "1|eUwkzfiCM1P5Jn3kZFWlLptVWBp2PQsVfDRcn6K08d4126a9",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/transaksi/user/4",
+							"raw": "{{base_url_test}}/api/transaksi/user/271745",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
 								"transaksi",
 								"user",
-								"4"
+								"271745"
 							]
 						}
 					},
@@ -1159,28 +1477,18 @@
 				{
 					"name": "Get Detail Transaksi API",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "1|eUwkzfiCM1P5Jn3kZFWlLptVWBp2PQsVfDRcn6K08d4126a9",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/transaksi/detail/1",
+							"raw": "{{base_url_test}}/api/transaksi/detail/5",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
 								"transaksi",
 								"detail",
-								"1"
+								"5"
 							]
 						}
 					},
@@ -1237,7 +1545,18 @@
 					"name": "Get All Banner (5 Data Limit)",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/banner/",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"banner",
+								""
+							]
+						}
 					},
 					"response": []
 				},
@@ -1245,7 +1564,18 @@
 					"name": "Get Single Banner",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/banner/1",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"banner",
+								"1"
+							]
+						}
 					},
 					"response": []
 				}
@@ -1337,13 +1667,13 @@
 			"name": "Cart",
 			"item": [
 				{
-					"name": "Create User Cart Copy",
+					"name": "Create User Cart",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"stok_id\": 1,\r\n    \"gudang_id\": 1,\r\n    \"quantity\": 5,\r\n    \"dpp\": 1300,\r\n    \"ppn\": 1500,\r\n    \"subtotal_detail\": 30000\r\n}",
+							"raw": "{\r\n    \"stok_id\": 7, //masukin stok etalase id\r\n    \"gudang_id\": 1,\r\n    \"quantity\": 5,\r\n    // \"dpp\": 1300,\r\n    // \"ppn\": 1500,\r\n    // \"subtotal_detail\": 30000\r\n    \"harga\": 12000\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1351,9 +1681,9 @@
 							}
 						},
 						"url": {
-							"raw": "{{base_url}}/api/cart/add",
+							"raw": "{{base_url_test}}/api/cart/add",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -1365,24 +1695,14 @@
 					"response": []
 				},
 				{
-					"name": "Get User Cart Copy",
+					"name": "Get User Cart",
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "2|EidHiIkKkxOISPlpCTFkurSeG54te5sUdexuXCC10b12ad10",
-									"type": "string"
-								}
-							]
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{base_url}}/api/cart",
+							"raw": "{{base_url_test}}/api/cart",
 							"host": [
-								"{{base_url}}"
+								"{{base_url_test}}"
 							],
 							"path": [
 								"api",
@@ -1393,7 +1713,7 @@
 					"response": []
 				},
 				{
-					"name": "Increment Cart Item Copy",
+					"name": "Increment Cart Item",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1424,7 +1744,7 @@
 					"response": []
 				},
 				{
-					"name": "Decrement Cart Item Copy",
+					"name": "Decrement Cart Item",
 					"request": {
 						"auth": {
 							"type": "bearer",
@@ -1455,7 +1775,7 @@
 					"response": []
 				},
 				{
-					"name": "Remove Cart Item Copy",
+					"name": "Remove Cart Item",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -1469,6 +1789,75 @@
 								"cart",
 								"remove",
 								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Cart Item",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\": 2,\r\n    // \"dpp\": 1200,\r\n    // \"ppn\": 1500,\r\n    // \"subtotal_detail\": 13500\r\n    \"harga\": 13500\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_test}}/api/cart/update/item/1",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"update",
+								"item",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove All Cart item",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/cart/remove-all",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"remove-all"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Cart Quantity + Subtotal",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/cart/get/quantity",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"cart",
+								"get",
+								"quantity"
 							]
 						}
 					},
@@ -1569,6 +1958,158 @@
 			]
 		},
 		{
+			"name": "Branch/Kanwil",
+			"item": [
+				{
+					"name": "Change User Branch &  Company",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"branch_id\": 213,\r\n    \"company_id\": 115\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{base_url_test}}/api/user/change/branch",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"change",
+								"branch"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Branch & Company",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{base_url_test}}/api/user/get/branch?=",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"get",
+								"branch"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": ""
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Payment Option",
+			"item": [
+				{
+					"name": "Get Payment Option By ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/payment-option/3",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"payment-option",
+								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Payment Option By User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/payment-option",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"payment-option"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Pembayaran Info By Transaksi ID",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/transaksi/pembayaran/5",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"transaksi",
+								"pembayaran",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bayar Transaksi",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url_test}}/api/transaksi/bayar/5",
+							"host": [
+								"{{base_url_test}}"
+							],
+							"path": [
+								"api",
+								"transaksi",
+								"bayar",
+								"5"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
 			"name": "Check Connection API",
 			"request": {
 				"method": "GET",
@@ -1627,6 +2168,11 @@
 		{
 			"key": "token",
 			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "base_url_test",
+			"value": "https://rpk2024-api-test.bulog.co.id",
 			"type": "string"
 		}
 	]

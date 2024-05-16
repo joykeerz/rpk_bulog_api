@@ -11,12 +11,20 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Obuchmann\OdooJsonRpc\Odoo;
 
 class AuthController extends Controller
 {
-    public function register(Request $request)
+    public function register(Request $request, Odoo $odoo)
     {
+        /* DEBUG MODE
+        $debug1 = DB::table('biodata')->max('id') + 1;
+        $debug2 = DB::table('users')->max('id') + 1;
+        return response()->json([$debug1, $debug2], 200);
+        */
+
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
@@ -96,6 +104,7 @@ class AuthController extends Controller
 
         $user = User::create([
             'id' => DB::table('users')->max('id') + 1,
+            'company_id' => 115,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -129,17 +138,27 @@ class AuthController extends Controller
             ], 200);
         };
 
-        $biodata =  Biodata::create([
-            'id' => DB::table('biodata')->max('id') + 1,
-            'user_id' => $user->id,
-            'alamat_id' => $alamat->id,
-            'kode_customer' => $request->kode_customer,
-            'branch_id' => 213,
-            'company_id' => 115,
-            'nama_rpk' => $request->nama_rpk,
-            'no_ktp' => $request->no_ktp,
-            'ktp_img' => $filePath,
-        ]);
+        // $biodata =  Biodata::create([
+        //     'user_id' => $user->id,
+        //     'alamat_id' => $alamat->id,
+        //     'kode_customer' => $request->kode_customer,
+        //     'branch_id' => 213,
+        //     'company_id' => 115,
+        //     'nama_rpk' => $request->nama_rpk,
+        //     'no_ktp' => $request->no_ktp,
+        //     'ktp_img' => $filePath,
+        // ]);
+
+        $biodata = new Biodata();
+        $biodata->user_id = $user->id;
+        $biodata->alamat_id = $alamat->id;
+        $biodata->kode_customer = $request->kode_customer;
+        $biodata->branch_id = 213;
+        $biodata->kode_company = "09001";
+        $biodata->nama_rpk = $request->nama_rpk;
+        $biodata->no_ktp = $request->no_ktp;
+        $biodata->ktp_img = $filePath;
+        $biodata->save();
 
         if (!$biodata) {
             return response()->json([
@@ -148,6 +167,8 @@ class AuthController extends Controller
         };
 
         $token = $user->createToken('auth_token')->plainTextToken;
+
+        // $this->addToErp($user, $biodata, $alamat, $odoo);
 
         return response()->json([
             'status_code' => 200,
@@ -219,6 +240,7 @@ class AuthController extends Controller
                 'users.email',
                 'users.no_hp',
                 'users.role_id',
+                'users.company_id',
                 'biodata.user_id',
                 'biodata.alamat_id',
                 'biodata.kode_customer',
@@ -243,5 +265,48 @@ class AuthController extends Controller
             'status_code' => 200,
             'data' => $customer,
         ]);
+    }
+
+    public function getDaerah()
+    {
+    }
+
+    public function addToErp($user, $biodata, $alamat, Odoo $odoo)
+    {
+        Log::info("adding to erp");
+
+        $resPartner = $odoo->create('res.partner', [
+            'name' => $user->name,
+            'email' => $user->email,
+            'phone' => $user->no_hp,
+            'mobile' => $user->no_hp,
+            'login_user' => $user->no_hp,
+            'nama_id_rpk' => $biodata->nama_rpk,
+            'ktp' => $biodata->no_ktp,
+            'cabang_terdaftar' => $biodata->branch_id,
+            'jenis_partner' => 2,
+            'street' => $alamat->jalan,
+            'street2' => $alamat->jalan_ext,
+            'blok' => $alamat->blok,
+            'rt' => $alamat->rt,
+            'rw' => $alamat->rw,
+            'zip' => $alamat->kode_pos,
+            'country_id' => 100,
+            'is_rpk_partner' => true,
+            'default_warehouse_id' => 1804,
+            'warehouse_company_id' => 115,
+        ]);
+
+        if (!$resPartner) {
+            return response()->json('failed to insert in erp', 400);
+        }
+        Log::info("done adding to erp");
+
+        Log::info("updating current user id with erp");
+        $user->id = $resPartner;
+        $user->save();
+        $biodata->user_id = $user->id;
+        $biodata->save();
+        Log::info("updating done");
     }
 }

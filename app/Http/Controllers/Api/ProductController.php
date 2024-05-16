@@ -126,8 +126,7 @@ class ProductController extends Controller
 
         $categories = DB::table('kategori')
             ->select('kategori.*', 'kategori.id as kid', 'kategori.created_at as cat')
-            ->where('kategori.nama_kategori', 'like', "%" . $search . "%")
-            // ->latest()
+            ->where('kategori.nama_kategori', 'ilike', "%" . $search . "%")
             ->orderBy('cat', 'desc')
             ->simplePaginate(10);
 

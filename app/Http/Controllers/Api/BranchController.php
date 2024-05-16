@@ -47,6 +47,7 @@ class BranchController extends Controller
         $branchCompany = DB::table('users')
             ->join('biodata', 'biodata.user_id', 'user.id')
             ->select('users.company_id', 'biodata.branch_id')
+            ->where('users.id', Auth::user()->id)
             ->first();
 
         if (!$branchCompany) {

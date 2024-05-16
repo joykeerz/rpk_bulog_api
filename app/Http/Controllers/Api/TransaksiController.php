@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Cart;
 use App\Models\DetailPesanan;
 use App\Models\PosCategory;
 use App\Models\PosDiscount;
@@ -10,6 +11,7 @@ use App\Models\PosInventory;
 use App\Models\PosInventoryLog;
 use App\Models\PosProduct;
 use App\Models\Produk;
+use App\Models\StokEtalase;
 use App\Models\Transaksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,9 +20,72 @@ use Illuminate\Support\Facades\Validator;
 
 class TransaksiController extends Controller
 {
+    public function createDetailPesananComplete($pesananId)
+    {
+        $carts = DB::table('carts')
+            ->join('stok_etalase', 'stok_etalase.id', 'carts.stok_id')
+            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+            ->join('prices', 'prices.id', 'stok.id')
+            ->join('gudang', 'carts.gudang_id', 'gudang.id')
+            ->join('produk', 'stok.produk_id', 'produk.id')
+            ->join('pajak', 'produk.pajak_id', 'pajak.id')
+            ->where('carts.user_id', '=', Auth::user()->id)
+            ->select(
+                'carts.id as cart_id',
+                'stok.id as stok_id',
+                'stok_etalase.id as stok_etalase_id',
+                'produk.id as product_id',
+                'gudang.id as gudang_id',
+                'produk.nama_produk as nama',
+                'prices.price_value as harga',
+                'carts.quantity',
+                'produk.produk_file_path as image',
+                'carts.dpp',
+                'carts.ppn',
+                'pajak.jenis_pajak',
+                'pajak.persentase_pajak',
+                'carts.subtotal_detail',
+                'gudang.nama_gudang'
+            )
+            ->get();
+        $listProduct = [];
+        $total = 0;
+
+        foreach ($carts as $key => $cart) {
+            array_push($listProduct, [
+                'pesanan_id' => $pesananId,
+                'produk_id' => $cart->product_id,
+                'qty' => $cart->quantity,
+                'harga' => $cart->harga,
+                'dpp' => $cart->dpp,
+                'ppn' => $cart->ppn,
+                'jenis_pajak' => $cart->jenis_pajak,
+                'persentase_pajak' => $cart->persentase_pajak,
+                'subtotal_detail' => $cart->subtotal_detail,
+            ]);
+
+            $currentStock = StokEtalase::where('id', $cart->stok_etalase_id)->first();
+            if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $cart->quantity) {
+                return response()->json([
+                    'error' => "Stok tidak mencukupi"
+                ], 400);
+            }
+            $currentStock->save();
+            $total += $cart->subtotal_detail;
+        }
+
+        $detailPesanan = DB::table('detail_pesanan')->insert($listProduct);
+        if (!$detailPesanan) {
+            return response()->json([
+                'error' => 'failed to create detail pesanan'
+            ], 500);
+        }
+    }
+
     public function createTransaksi(Request $request, $id)
     {
-        // return $request->all();
+        $this->createDetailPesananComplete($id);
+
         if (!$request->input()) {
             return response()->json([
                 'error' => "please fill data"
@@ -30,29 +95,29 @@ class TransaksiController extends Controller
         $validator = Validator::make($request->all(), [
             'payment_option_id' => 'required',
             'status_pembayaran' => 'required',
-            'subtotal_produk' => 'required',
+            // 'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
-            'total_qty' => 'required',
-            'total_dpp' => 'required',
-            'total_ppn' => 'required',
-            'dpp_terutang' => 'required',
-            'ppn_terutang' => 'required',
-            'dpp_dibebaskan' => 'required',
-            'ppn_dibebaskan' => 'required',
+            // 'total_qty' => 'required',
+            // 'total_dpp' => 'required',
+            // 'total_ppn' => 'required',
+            // 'dpp_terutang' => 'required',
+            // 'ppn_terutang' => 'required',
+            // 'dpp_dibebaskan' => 'required',
+            // 'ppn_dibebaskan' => 'required',
             'kode_company' => 'required',
             'nomor_pembayaran' => 'required'
         ], [
             'payment_option_id.required' => 'payment option tidak boleh kosong',
             'status_pembayaran.required' => 'Status Pembayaran tidak boleh kosong',
-            'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
+            // 'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
             'subtotal_pengiriman.required' => 'Subtotal Pengiriman tidak boleh kosong',
-            'total_qty.required' => 'Total Qty tidak boleh kosong',
-            'total_dpp.required' => 'Total DPP tidak boleh kosong',
-            'total_ppn.required' => 'Total PPN tidak boleh kosong',
-            'dpp_terutang.required' => 'DPP Terutang tidak boleh kosong',
-            'ppn_terutang.required' => 'PPN Terutang tidak boleh kosong',
-            'dpp_dibebaskan.required' => 'DPP Dibebaskan tidak boleh kosong',
-            'ppn_dibebaskan.required' => 'PPN Dibebaskan tidak boleh kosong',
+            // 'total_qty.required' => 'Total Qty tidak boleh kosong',
+            // 'total_dpp.required' => 'Total DPP tidak boleh kosong',
+            // 'total_ppn.required' => 'Total PPN tidak boleh kosong',
+            // 'dpp_terutang.required' => 'DPP Terutang tidak boleh kosong',
+            // 'ppn_terutang.required' => 'PPN Terutang tidak boleh kosong',
+            // 'dpp_dibebaskan.required' => 'DPP Dibebaskan tidak boleh kosong',
+            // 'ppn_dibebaskan.required' => 'PPN Dibebaskan tidak boleh kosong',
             'kode_company.required' => 'Kode Company tidak boleh kosong',
             'nomor_pembayaran.required' => 'Nomor pembayaran tidak boleh kosong',
         ]);
@@ -63,25 +128,59 @@ class TransaksiController extends Controller
             ], 200);
         }
 
+        $userId = Auth::user()->id;
+        $cartItems = Cart::where('user_id', $userId)->get();
+        $totalQuantity = 0;
+        $totalSubtotal = 0;
+        $totalDpp = 0;
+        $totalPpn = 0;
+        $dppTerutang = 0;
+        $ppnTerutang = 0;
+        $dppDibebaskan = 0;
+        $ppnDibebaskan = 0;
+
+        /// kalkulasi pajak, quantity dan subtotal
+        foreach ($cartItems as $item) {
+            $totalQuantity += $item->quantity;
+            $totalSubtotal += $item->subtotal_detail;
+            $totalDpp += $item->dpp;
+
+            $pajakInfo = DB::table('stok_etalase')
+                ->join('stok', 'stok.id', 'stok_etalase.stok_id')
+                ->join('produk', 'produk.id', 'stok.produk_id')
+                ->join('pajak', 'pajak.id', 'produk.pajak_id')
+                ->select('pajak.jenis_pajak', 'pajak.persentase_pajak')
+                ->where('stok_etalase.id', $item->stok_id)
+                ->first();
+
+            if (strtolower($pajakInfo->jenis_pajak) === 'include' || strtolower($pajakInfo->jenis_pajak) === 'exclude') {
+                $totalPpn += $item->ppn;
+                $dppTerutang += $item->dpp;
+                $ppnTerutang += $item->ppn;
+            } else {
+                $dppDibebaskan += $item->dpp;
+                $ppnDibebaskan += $item->ppn;
+            }
+        }
+
         $transaksi = new Transaksi;
         $transaksi->pesanan_id = $id;
         $transaksi->tipe_pembayaran = DB::table('payment_options')
-            ->where('payment_options.id', $request->payment_option_id)
             ->join('payment_types', 'payment_types.id', 'payment_options.payment_type_id')
-            ->value('type_name')
-            ->first();
+            ->where('payment_options.id', $request->payment_option_id)
+            ->value('type_name');
         $transaksi->status_pembayaran = $request->status_pembayaran;
-        $transaksi->subtotal_produk = $request->subtotal_produk;
+        $transaksi->subtotal_produk = $totalSubtotal;
         $transaksi->subtotal_pengiriman = $request->subtotal_pengiriman;
-        $transaksi->total_qty = $request->total_qty;
-        $transaksi->total_pembayaran = $request->subtotal_produk + $request->subtotal_pengiriman;
+        $transaksi->total_qty = $totalQuantity;
+        $transaksi->total_pembayaran = $totalSubtotal + $request->subtotal_pengiriman;
         $transaksi->kode_transaksi = 'ORD/' . $id . '/' . now()->format('m') . '/' . now()->format('Y') . '/' . $request->kode_company;
-        $transaksi->total_dpp = $request->total_dpp;
-        $transaksi->total_ppn = $request->total_ppn;
-        $transaksi->dpp_terutang = $request->dpp_terutang;
-        $transaksi->ppn_terutang = $request->ppn_terutang;
-        $transaksi->dpp_dibebaskan = $request->dpp_dibebaskan;
-        $transaksi->ppn_dibebaskan = $request->ppn_dibebaskan;
+        $transaksi->total_dpp = $totalDpp;
+        $transaksi->total_ppn = $totalPpn;
+        $transaksi->dpp_terutang = $dppTerutang;
+        $transaksi->ppn_terutang = $ppnTerutang;
+        $transaksi->dpp_dibebaskan = $dppDibebaskan;
+        $transaksi->ppn_dibebaskan = $ppnDibebaskan;
         $transaksi->nomor_pembayaran = $request->nomor_pembayaran;
         $transaksi->payment_option_id = $request->payment_option_id;
         $transaksi->save();
@@ -92,7 +191,8 @@ class TransaksiController extends Controller
             ], 500);
         }
 
-        $this->addToPos($transaksi->id);
+        return response()->json($transaksi, 200);
+        // $this->addToPos($transaksi->id);
     }
 
     public function getTransaksi($id)
@@ -144,6 +244,7 @@ class TransaksiController extends Controller
                 'pesanan.kurir_id',
                 'pesanan.gudang_id',
                 'pesanan.status_pemesanan',
+                'pesanan.created_at as transaction_date',
                 'users.name',
                 'alamat.jalan',
                 'alamat.jalan_ext',
@@ -159,6 +260,7 @@ class TransaksiController extends Controller
                 'transaksi.created_at as cat'
             )
             ->first();
+
 
         $detailPesanan = DB::table('detail_pesanan')
             ->join('produk', 'produk.id', '=', 'detail_pesanan.produk_id')
@@ -210,7 +312,6 @@ class TransaksiController extends Controller
 
     public function getTransaksiListByUser($id)
     {
-
         $transaksi = DB::table('transaksi')
             ->join('pesanan', 'transaksi.pesanan_id', '=', 'pesanan.id')
             ->join('users', 'pesanan.user_id', '=', 'users.id')
@@ -235,9 +336,10 @@ class TransaksiController extends Controller
                 'pesanan.kurir_id',
                 'pesanan.status_pemesanan',
                 'pesanan.gudang_id',
+                'pesanan.created_at as transaction_date',
                 'users.name',
-                'transaksi.id as tid',
-                'pesanan.id as pid',
+                'transaksi.id as transaksi_id',
+                'pesanan.id as pesanan_id',
                 'users.id as uid',
                 'transaksi.created_at as cat'
             )
@@ -261,6 +363,10 @@ class TransaksiController extends Controller
         $transaksi = Transaksi::find($id);
         $detailPesanan = DetailPesanan::where('pesanan_id', $transaksi->pesanan_id)->get();
         $profileId = Auth::user()->posProfile->id;
+
+        if (!$profileId) {
+            return response()->json('user tidak memiliki akun PoS. tidak menambahkan inventory PoS', 200);
+        }
 
         // Start a database transaction
         DB::beginTransaction();
