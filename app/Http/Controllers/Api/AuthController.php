@@ -138,17 +138,6 @@ class AuthController extends Controller
             ], 200);
         };
 
-        // $biodata =  Biodata::create([
-        //     'user_id' => $user->id,
-        //     'alamat_id' => $alamat->id,
-        //     'kode_customer' => $request->kode_customer,
-        //     'branch_id' => 213,
-        //     'company_id' => 115,
-        //     'nama_rpk' => $request->nama_rpk,
-        //     'no_ktp' => $request->no_ktp,
-        //     'ktp_img' => $filePath,
-        // ]);
-
         $biodata = new Biodata();
         $biodata->user_id = $user->id;
         $biodata->alamat_id = $alamat->id;

@@ -97,6 +97,7 @@ class PaymentOptionController extends Controller
     {
         $transaksi = Transaksi::find($id);
         $transaksi->status_pembayaran = 'sudah dibayar';
+        $transaksi->is_paid = true;
         $transaksi->save();
 
         if (!$transaksi) {
