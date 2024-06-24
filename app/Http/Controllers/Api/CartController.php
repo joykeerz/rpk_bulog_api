@@ -14,11 +14,14 @@ class CartController extends Controller
     public function getUserCart()
     {
         $cart = DB::table('carts')
-            ->join('stok_etalase', 'stok_etalase.id', 'carts.stok_id')
-            ->join('stok', 'stok.id', 'stok_etalase.stok_id')
-            ->join('prices', 'prices.id', 'stok.id')
-            ->join('gudang', 'carts.gudang_id', 'gudang.id')
-            ->join('produk', 'stok.produk_id', 'produk.id')
+            ->join('stok_etalase', 'stok_etalase.id', 'carts.stok_id') /// Note: carts.stok_id adalah harusnya stok_etalase_id (foreign key untuk etalase bukan stok)
+            ->join('stok', 'stok.id', '=', 'stok_etalase.stok_id')
+            ->join('prices', function ($join) {
+                $join->on('prices.company_id', '=', 'stok_etalase.company_id')
+                    ->on('prices.produk_id', '=', 'stok_etalase.produk_id');
+            })
+            ->join('produk', 'produk.id', '=', 'stok_etalase.produk_id')
+            ->join('gudang', 'gudang.id', '=', 'stok_etalase.gudang_id')
             ->join('pajak', 'produk.pajak_id', 'pajak.id')
             ->where('carts.user_id', '=', Auth::user()->id)
             ->select(
@@ -38,6 +41,7 @@ class CartController extends Controller
                 'carts.subtotal_detail',
                 'gudang.nama_gudang'
             )
+            ->orderBy('carts.created_at')
             ->simplePaginate(15);
 
         if (empty($cart)) {
@@ -78,7 +82,7 @@ class CartController extends Controller
         $currentCart = Cart::where('user_id', Auth::user()->id)->where('stok_id', $request->stok_id)->first();
         $pajakInfo = DB::table('stok_etalase')
             ->join('stok', 'stok.id', 'stok_etalase.stok_id')
-            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('produk', 'produk.id', '=', 'stok_etalase.produk_id')
             ->join('pajak', 'pajak.id', 'produk.pajak_id')
             ->select('pajak.jenis_pajak', 'pajak.persentase_pajak')
             ->where('stok_etalase.id', $request->stok_id)
@@ -167,7 +171,7 @@ class CartController extends Controller
         $ppn = 0;
         $pajakInfo = DB::table('stok_etalase')
             ->join('stok', 'stok.id', 'stok_etalase.stok_id')
-            ->join('produk', 'produk.id', 'stok.produk_id')
+            ->join('produk', 'produk.id', '=', 'stok_etalase.produk_id')
             ->join('pajak', 'pajak.id', 'produk.pajak_id')
             ->select('pajak.jenis_pajak', 'pajak.persentase_pajak')
             ->where('stok_etalase.id', $cart->stok_id)

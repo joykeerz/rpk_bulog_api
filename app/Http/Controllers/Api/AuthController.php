@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Alamat;
 use App\Models\Biodata;
+use App\Models\DaftarAlamat;
+use App\Models\PosCategory;
+use App\Models\PosDiscount;
+use App\Models\PosEmployee;
+use App\Models\PosPayment;
+use App\Models\PosProfile;
+use App\Models\PosPromo;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,76 +26,42 @@ class AuthController extends Controller
 {
     public function register(Request $request, Odoo $odoo)
     {
-        /* DEBUG MODE
-        $debug1 = DB::table('biodata')->max('id') + 1;
-        $debug2 = DB::table('users')->max('id') + 1;
-        return response()->json([$debug1, $debug2], 200);
-        */
+        // Validate request data
+        // $validator = Validator::make($request->all(), [
+        //     'name' => 'required|string|max:255',
+        //     'email' => 'required|email|max:255|unique:users,email',
+        //     'password' => 'required|string|min:8|confirmed',
+        //     'no_hp' => 'required|string|max:28|unique:users,no_hp',
+        //     'jalan' => 'required|string|max:255',
+        //     'jalan_ext' => 'required|string|max:255',
+        //     'nomor' => 'required|string|max:255',
+        //     'rt' => 'required|string|max:255',
+        //     'rw' => 'required|string|max:255',
+        //     'provinsi_id' => 'required|integer|exists:provinsi,id',
+        //     'kabupaten_id' => 'required|integer|exists:kabupaten,id',
+        //     'kecamatan_id' => 'required|integer|exists:kecamatan,id',
+        //     'kelurahan_id' => 'required|integer|exists:kelurahan,id',
+        //     'negara' => 'required|string|max:255',
+        //     'kode_pos' => 'required|string|max:10',
+        //     'nama_rpk' => 'required|string|max:255',
+        //     'no_ktp' => 'required|string|max:255',
+        //     'kode_customer' => 'required|string|max:255',
+        //     'ktp_img' => 'required|file|image|mimes:jpg,jpeg,png|max:10000',
+        //     'npwp_img' => 'nullable|file|image|mimes:jpg,jpeg,png|max:10000',
+        //     'nib_img' => 'nullable|file|image|mimes:jpg,jpeg,png|max:10000',
+        // ]);
 
-        if (!$request->input()) {
-            return response()->json([
-                'error' => "please fill data"
-            ], 400);
-        }
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => $validator->errors()->toJson()
+        //     ], 400);
+        // }
 
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:8',
-            'no_hp' => 'required|string|max:15|unique:users,no_hp',
-            'jalan' => 'required|string|max:255',
-            'jalan_ext' => 'required|string|max:255',
-            'blok' => 'required|string|max:255',
-            'rt' => 'required|string|max:255',
-            'rw' => 'required|string|max:255',
-            'provinsi' => 'required|string|max:255',
-            'kota_kabupaten' => 'required|string|max:255',
-            'kecamatan' => 'required|string|max:255',
-            'kelurahan' => 'required|string|max:255',
-            'negara' => 'required|string|max:255',
-            'kode_pos' => 'required|string|max:255',
-            'nama_rpk' => 'required|string|max:255',
-            'no_ktp' => 'required|string|max:255',
-            'kode_customer' => 'required|string|max:255',
-            'ktp_img' => 'required|file|image|mimes:jpg,jpeg,png|max:10000',
-        ], [
-            'name.required' => 'Nama harus diisi',
-            'email.required' => 'Email harus diisi',
-            'email.unique' => 'Email sudah terdaftar',
-            'password.required' => 'Password harus diisi',
-            'no_hp.required' => 'No HP harus diisi',
-            'no_hp.unique' => 'No HP sudah terdaftar',
-            'jalan.required' => 'Jalan harus diisi',
-            'jalan_ext.required' => 'Jalan Ext harus diisi',
-            'blok.required' => 'Blok harus diisi',
-            'rt.required' => 'RT harus diisi',
-            'rw.required' => 'RW harus diisi',
-            'provinsi.required' => 'Provinsi harus diisi',
-            'kota_kabupaten.required' => 'Kota/Kabupaten harus diisi',
-            'kecamatan.required' => 'Kecamatan harus diisi',
-            'kelurahan.required' => 'Kelurahan harus diisi',
-            'negara.required' => 'Negara harus diisi',
-            'kode_pos.required' => 'Kode Pos harus diisi',
-            'nama_rpk.required' => 'Nama RPK harus diisi',
-            'no_ktp.required' => 'No KTP harus diisi',
-            'kode_customer.required' => 'Kode Customer harus diisi',
-            'ktp_img.required' => 'KTP harus diisi',
-            'ktp_img.image' => 'KTP harus berupa gambar',
-            'ktp_img.file' => 'KTP harus berupa file',
-            'ktp_img.mimes' => 'KTP harus berformat jpg, jpeg atau png',
-            'ktp_img.max' => 'KTP maksimal 10MB',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => $validator->errors()->toJson()
-            ], 200);
-        }
-
-        $filePath = 'none';
+        $filePath = '';
         if ($request->hasFile('ktp_img')) {
-            /// Alternate store filepath method
-            // $filePath = $request->file('ktp_img')->store('images/ktp', 'public');
+            /* Alternate store filepath method
+            $filePath = $request->file('ktp_img')->store('images/ktp', 'public');
+            */
             $url = env('API_DASHBOARD_URL') . '/mobile/receive-ktp-image';
             $image = $request->file('ktp_img');
             $fileName = 'image_' . time() . '.' . $image->getClientOriginalExtension();
@@ -100,6 +73,36 @@ class AuthController extends Controller
             )->post($url);
             $responseData = $response->json();
             $filePath = $responseData['path'];
+        }
+
+        $filePathNpwp = '';
+        if ($request->hasFile('npwp_img')) {
+            $url = env('API_DASHBOARD_URL') . '/mobile/receive-npwp-image';
+            $image = $request->file('npwp_img');
+            $fileName = 'image_' . time() . '.' . $image->getClientOriginalExtension();
+            $imageContent = file_get_contents($image->getRealPath());
+            $response = Http::attach(
+                'npwp_img',
+                $imageContent,
+                $fileName
+            )->post($url);
+            $responseData = $response->json();
+            $filePathNpwp = $responseData['path'];
+        }
+
+        $filePathNib = '';
+        if ($request->hasFile('nib_img')) {
+            $url = env('API_DASHBOARD_URL') . '/mobile/receive-nib-image';
+            $image = $request->file('nib_img');
+            $fileName = 'image_' . time() . '.' . $image->getClientOriginalExtension();
+            $imageContent = file_get_contents($image->getRealPath());
+            $response = Http::attach(
+                'nib_img',
+                $imageContent,
+                $fileName
+            )->post($url);
+            $responseData = $response->json();
+            $filePathNib = $responseData['path'];
         }
 
         $user = User::create([
@@ -118,16 +121,28 @@ class AuthController extends Controller
             ], 200);
         };
 
+        $this->generatePosProfile($user->id);
+
+        $provinsi = DB::table('provinsi')->where('id', $request->provinsi_id)->value('display_name');
+        $kabupaten = DB::table('kabupaten')->where('id', $request->kabupaten_id)->value('display_name');
+        $kecamatan = DB::table('kecamatan')->where('id', $request->kecamatan_id)->value('display_name');
+        $kelurahan = DB::table('kelurahan')->where('id', $request->kelurahan_id)->value('display_name');
+
         $alamat = Alamat::create([
             'jalan' => $request->jalan,
             'jalan_ext' => $request->jalan_ext,
-            'blok' => $request->blok,
+            'blok' => $request->blok ? $request->blok : 'kosong',
+            'nomor' => $request->nomor,
             'rt' => $request->rt,
             'rw' => $request->rw,
-            'provinsi' => $request->provinsi,
-            'kota_kabupaten' => $request->kota_kabupaten,
-            'kecamatan' => $request->kecamatan,
-            'kelurahan' => $request->kelurahan,
+            'provinsi_id' => $request->provinsi_id,
+            'provinsi' => $provinsi,
+            'kabupaten_id' => $request->kabupaten_id,
+            'kota_kabupaten' => $kabupaten,
+            'kecamatan_id' => $request->kecamatan_id,
+            'kecamatan' => $kecamatan,
+            'kelurahan_id' => $request->kelurahan_id,
+            'kelurahan' => $kelurahan,
             'negara' => $request->negara,
             'kode_pos' => $request->kode_pos,
         ]);
@@ -147,7 +162,15 @@ class AuthController extends Controller
         $biodata->nama_rpk = $request->nama_rpk;
         $biodata->no_ktp = $request->no_ktp;
         $biodata->ktp_img = $filePath;
+        $biodata->npwp_img = $filePathNpwp;
+        $biodata->nib_img = $filePathNib;
         $biodata->save();
+
+        $daftarAlamat = new DaftarAlamat();
+        $daftarAlamat->user_id = $user->id;
+        $daftarAlamat->alamat_id = $alamat->id;
+        $daftarAlamat->isActive = true;
+        $daftarAlamat->save();
 
         if (!$biodata) {
             return response()->json([
@@ -157,14 +180,66 @@ class AuthController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        // $this->addToErp($user, $biodata, $alamat, $odoo);
-
         return response()->json([
             'status_code' => 200,
             'data' => [$user, $alamat],
             'access_token' => $token,
             'token_type' => 'Bearer'
         ]);
+    }
+
+    public function generatePosProfile($userId)
+    {
+        // $profile = PosProfile::firstOrNew(['user_id' => $userId]);
+        // if (!$profile->exists) {
+        $user = User::find($userId);
+        $profile = new PosProfile();
+        $profile->user_id = $userId;
+        $profile->pos_name = $user->name;
+        $profile->save();
+
+        $category = new PosCategory();
+        $category->profile_id = $profile->id;
+        $category->category_name = "Lainnya";
+        $category->category_desc = "Produk milik toko";
+        $category->is_from_bulog = false;
+        $category->save();
+
+        $promo = new PosPromo();
+        $promo->profile_id = $profile->id;
+        $promo->promo_name = "Tidak Promo";
+        $promo->promo_type = "Percent Off";
+        $promo->promo_category = "Bulog Discount";
+        $promo->promo_value = 0;
+        $promo->is_active = true;
+        $promo->is_from_bulog = true;
+        $promo->promo_start = now();
+        $promo->promo_end = now();
+        $promo->save();
+
+        $discount = new PosDiscount();
+        $discount->profile_id = $profile->id;
+        $discount->discount_name = "Tidak Diskon";
+        $discount->discount_type = "Percent Off";
+        $discount->discount_value = 0;
+        $discount->is_active = true;
+        $discount->is_from_bulog = true;
+        $discount->save();
+
+        $paymentMethod = new PosPayment();
+        $paymentMethod->profile_id = $profile->id;
+        $paymentMethod->payment_method = "Tunai";
+        $paymentMethod->payment_info = "Pembayaran tunai";
+        $paymentMethod->save();
+
+        $employee = DB::table('pos_employees')->insert([
+            'profile_id' => $profile->id,
+            'pin' => bcrypt('123456'),
+            'employee_name' => $user->name,
+            'employee_phone' => $user->no_hp,
+            'is_owner' => true,
+        ]);
+        // }
     }
 
     public function login(Request $request)
@@ -224,6 +299,10 @@ class AuthController extends Controller
         $customer = DB::table('users')
             ->join('biodata', 'users.id', '=', 'biodata.user_id')
             ->join('alamat', 'biodata.alamat_id', '=', 'alamat.id')
+            ->join('provinsi', 'provinsi.id', 'alamat.provinsi_id')
+            ->join('kabupaten', 'kabupaten.id', 'alamat.kabupaten_id')
+            ->join('kecamatan', 'kecamatan.id', 'alamat.kecamatan_id')
+            ->join('kelurahan', 'kelurahan.id', 'alamat.kelurahan_id')
             ->select(
                 'users.name',
                 'users.email',
@@ -231,71 +310,68 @@ class AuthController extends Controller
                 'users.role_id',
                 'users.company_id',
                 'biodata.user_id',
+                'biodata.branch_id',
                 'biodata.alamat_id',
                 'biodata.kode_customer',
                 'biodata.nama_rpk',
                 'biodata.no_ktp',
                 'biodata.ktp_img',
+                'biodata.npwp_img',
+                'biodata.nib_img',
                 'alamat.jalan',
                 'alamat.jalan_ext',
                 'alamat.blok',
+                'alamat.nomor',
                 'alamat.rt',
                 'alamat.rw',
+                'provinsi.id as provinsi_id',
                 'alamat.provinsi',
+                'kabupaten.id as kabupaten_id',
                 'alamat.kota_kabupaten',
+                'kecamatan.id as kecamatan_id',
                 'alamat.kecamatan',
+                'kelurahan.id as kelurahan_id',
                 'alamat.kelurahan',
                 'alamat.negara',
                 'alamat.kode_pos',
             )
             ->where('users.id', Auth::user()->id)
             ->first();
+        $gudangId = DB::table('gudang')->where('branch_id', $customer->branch_id)->value('id');
+        $customer->gudang_id = $gudangId;
+        // $customer = DB::table('users')
+        //     ->join('biodata', 'users.id', '=', 'biodata.user_id')
+        //     ->join('alamat', 'biodata.alamat_id', '=', 'alamat.id')
+        //     ->select(
+        //         'users.name',
+        //         'users.email',
+        //         'users.no_hp',
+        //         'users.role_id',
+        //         'users.company_id',
+        //         'biodata.user_id',
+        //         'biodata.alamat_id',
+        //         'biodata.kode_customer',
+        //         'biodata.nama_rpk',
+        //         'biodata.no_ktp',
+        //         'biodata.ktp_img',
+        //         'alamat.jalan',
+        //         'alamat.jalan_ext',
+        //         'alamat.blok',
+        //         'alamat.nomor',
+        //         'alamat.rt',
+        //         'alamat.rw',
+        //         'alamat.provinsi',
+        //         'alamat.kota_kabupaten',
+        //         'alamat.kecamatan',
+        //         'alamat.negara',
+        //         'alamat.kode_pos',
+        //     )
+        //     ->where('users.id', Auth::user()->id)
+        //     ->first();
+
         return response()->json([
             'status_code' => 200,
             'data' => $customer,
         ]);
-    }
-
-    public function getDaerah()
-    {
-    }
-
-    public function addToErp($user, $biodata, $alamat, Odoo $odoo)
-    {
-        Log::info("adding to erp");
-
-        $resPartner = $odoo->create('res.partner', [
-            'name' => $user->name,
-            'email' => $user->email,
-            'phone' => $user->no_hp,
-            'mobile' => $user->no_hp,
-            'login_user' => $user->no_hp,
-            'nama_id_rpk' => $biodata->nama_rpk,
-            'ktp' => $biodata->no_ktp,
-            'cabang_terdaftar' => $biodata->branch_id,
-            'jenis_partner' => 2,
-            'street' => $alamat->jalan,
-            'street2' => $alamat->jalan_ext,
-            'blok' => $alamat->blok,
-            'rt' => $alamat->rt,
-            'rw' => $alamat->rw,
-            'zip' => $alamat->kode_pos,
-            'country_id' => 100,
-            'is_rpk_partner' => true,
-            'default_warehouse_id' => 1804,
-            'warehouse_company_id' => 115,
-        ]);
-
-        if (!$resPartner) {
-            return response()->json('failed to insert in erp', 400);
-        }
-        Log::info("done adding to erp");
-
-        Log::info("updating current user id with erp");
-        $user->id = $resPartner;
-        $user->save();
-        $biodata->user_id = $user->id;
-        $biodata->save();
-        Log::info("updating done");
     }
 }

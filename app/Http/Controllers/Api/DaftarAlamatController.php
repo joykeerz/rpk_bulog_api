@@ -127,4 +127,61 @@ class DaftarAlamatController extends Controller
             'alamat' => $daftarAlamat
         ], 200);
     }
+
+    public function getAlamatById($alamatID)
+    {
+        $alamat = Alamat::find($alamatID);
+        if ($alamat == null) {
+            return response()->json('alamat not found', 404);
+        }
+
+        return response()->json($alamat, 200);
+    }
+
+    public function updateAlamatById(Request $request, $alamatID)
+    {
+        if (!$request->input()) {
+            return response()->json([
+                'error' => "please fill data"
+            ], 400);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'jalan' => 'required',
+            'provinsi' => 'required',
+            'kota_kabupaten' => 'required',
+            'kecamatan' => 'required',
+            'kode_pos' => 'required',
+        ], [
+            'jalan.required' => 'jalan tidak boleh kosong',
+            'provinsi.required' => 'provinsi tidak boleh kosong',
+            'kota_kabupaten.required' => 'kota tidak boleh kosong',
+            'kecamatan.required' => 'kecamatan tidak boleh kosong',
+            'kode_pos.required' => 'kode pos tidak boleh kosong',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()->toJson()
+            ], 200);
+        }
+
+        $alamat = Alamat::find($alamatID);
+        if ($alamat == null) {
+            return response()->json('alamat not found', 404);
+        }
+        $alamat->jalan = $request->jalan;
+        $alamat->jalan_ext = $request->jalan_ext;
+        $alamat->blok = $request->blok;
+        $alamat->rt = $request->rt;
+        $alamat->rw = $request->rw;
+        $alamat->provinsi = $request->provinsi;
+        $alamat->kota_kabupaten = $request->kota_kabupaten;
+        $alamat->kecamatan = $request->kecamatan;
+        $alamat->kelurahan = $request->kelurahan;
+        $alamat->kode_pos = $request->kode_pos;
+        $alamat->save();
+
+        return response()->json($alamat, 200);
+    }
 }

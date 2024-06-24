@@ -13,8 +13,12 @@ use App\Http\Controllers\Api\StockController;
 use App\Http\Controllers\Api\TransaksiController;
 use App\Http\Controllers\Api\WishlistController;
 use App\Http\Controllers\Api\CartController;
+use App\Http\Controllers\Api\DaerahController;
 use App\Http\Controllers\Api\DaftarAlamatController;
+use App\Http\Controllers\Api\DebugController;
+use App\Http\Controllers\Api\KurirController;
 use App\Http\Controllers\Api\PaymentOptionController;
+use App\Http\Controllers\Api\VaController;
 use App\Http\Controllers\PosCategoryController;
 use App\Http\Controllers\PosInventoryController;
 use App\Http\Controllers\PosMainController;
@@ -55,9 +59,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     /* wishlist route */
     Route::prefix('wishlist')->group(function () {
-        Route::get('/', [WishlistController::class, 'getUserWishlist']);
+        Route::get('/get/{id}', [WishlistController::class, 'getUserWishlist']);
         Route::post('/add', [WishlistController::class, 'addUserWishlist']);
-        Route::get('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
+        Route::post('/toggle', [WishlistController::class, 'toggleUserWishlist']);
+        Route::delete('/remove/{id}', [WishlistController::class, 'removeUserWishlist']);
     });
 
     /* cart route */
@@ -75,9 +80,11 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('daftar-alamat')->group(function () {
         Route::get('/', [DaftarAlamatController::class, 'getDaftarAlamatUser']);
+        Route::get('/alamat/{id}', [DaftarAlamatController::class, 'getAlamatById']);
         Route::post('/add', [DaftarAlamatController::class, 'addAlamat']);
         Route::delete('/remove/{id}', [DaftarAlamatController::class, 'removeAlamat']);
         Route::get('/toggle/{id}', [DaftarAlamatController::class, 'toggleAlamat']);
+        Route::put('/update/alamat/{id}', [DaftarAlamatController::class, 'updateAlamatById']);
     });
 
     Route::prefix('payment-option')->group(function () {
@@ -105,8 +112,16 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('user')->group(function () {
         Route::post('/change/branch', [BranchController::class, 'setBranchCompany']);
-        Route::get('get/branch', [BranchController::class, 'getBranchCompany']);
+        Route::get('/get/branch', [BranchController::class, 'getBranchCompany']);
     });
+
+    Route::prefix('kurir')->group(function () {
+        Route::get('/all', [KurirController::class, 'getAllKurir']);
+        Route::get('/user', [KurirController::class, 'getKurirByUser']);
+        Route::get('/id/{id}', [KurirController::class, 'getKurirById']);
+    });
+
+    Route::get('token/stock/{id}', [StockController::class, 'getSingleStockWithUser']);
 });
 
 ///Product Routes
@@ -140,6 +155,8 @@ Route::prefix('stock')->group(function () {
     Route::get('/product/{id}', [StockController::class, 'getStockFromProduct']);
     Route::get('/category/{id}', [StockController::class, 'getStocksByCategory']);
     Route::get('/category/{cid}/gudang/{gid}', [StockController::class, 'getStocksByCategoryAndGudang']);
+    Route::get('/unggulan', [StockController::class, 'getAllStockUnggulan']);
+    Route::get('/unggulan/gudang/{id}', [StockController::class, 'getStockUnggulanFromGudangId']);
     Route::get('/{id}', [StockController::class, 'getSingleStock']);
     Route::post('/search/product', [StockController::class, 'searchStockByProductName']);
     Route::post('/search/category', [StockController::class, 'searchStockByCategoryName']);
@@ -156,4 +173,26 @@ Route::prefix('berita')->group(function () {
 Route::prefix('banner')->group(function () {
     Route::get('/', [BannerController::class, 'index']);
     Route::get('/{id}', [BannerController::class, 'show']);
+});
+
+Route::prefix('virtual-account')->group(function () {
+    Route::post('/get-token', [VaController::class, 'getToken']);
+    Route::post('/generate-signature', [VaController::class, 'generateSignature']);
+});
+
+/* Daerah route */
+Route::prefix('daerah')->group(function () {
+    Route::get('/provinsi/all', [DaerahController::class, 'getAllProvinsi']);
+    Route::get('/kota/all', [DaerahController::class, 'getAllKota']);
+    Route::get('/kabupaten/all', [DaerahController::class, 'getAllKabupaten']);
+    Route::get('/kecamatan/all', [DaerahController::class, 'getAllKecamatan']);
+    Route::get('/kelurahan/all', [DaerahController::class, 'getAllKelurahan']);
+    Route::get('/kota/id/{id}', [DaerahController::class, 'getKotaByProvinsiId']);
+    Route::get('/kabupaten/id/{id}', [DaerahController::class, 'getKabupatenByProvinsiId']);
+    Route::get('/kecamatan/id/{id}', [DaerahController::class, 'getKecamatanByKabupatenId']);
+    Route::get('/kelurahan/id/{id}', [DaerahController::class, 'getKelurahanByKecamatanId']);
+});
+
+Route::prefix('debug')->group(function () {
+    Route::get('/query/get', [DebugController::class, 'queryGet']);
 });

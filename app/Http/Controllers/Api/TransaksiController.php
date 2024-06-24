@@ -25,7 +25,10 @@ class TransaksiController extends Controller
         $carts = DB::table('carts')
             ->join('stok_etalase', 'stok_etalase.id', 'carts.stok_id')
             ->join('stok', 'stok.id', 'stok_etalase.stok_id')
-            ->join('prices', 'prices.id', 'stok.id')
+            ->join('prices', function ($join) {
+                $join->on('prices.company_id', '=', 'stok_etalase.company_id')
+                    ->on('prices.produk_id', '=', 'stok_etalase.produk_id');
+            })
             ->join('gudang', 'carts.gudang_id', 'gudang.id')
             ->join('produk', 'stok.produk_id', 'produk.id')
             ->join('pajak', 'produk.pajak_id', 'pajak.id')
@@ -64,13 +67,13 @@ class TransaksiController extends Controller
                 'subtotal_detail' => $cart->subtotal_detail,
             ]);
 
-            $currentStock = StokEtalase::where('id', $cart->stok_etalase_id)->first();
-            if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $cart->quantity) {
-                return response()->json([
-                    'error' => "Stok tidak mencukupi"
-                ], 400);
-            }
-            $currentStock->save();
+            // $currentStock = StokEtalase::where('id', $cart->stok_etalase_id)->first();
+            // if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $cart->quantity) {
+            //     return response()->json([
+            //         'error' => "Stok tidak mencukupi"
+            //     ], 400);
+            // }
+            // $currentStock->save();
             $total += $cart->subtotal_detail;
         }
 
@@ -95,29 +98,13 @@ class TransaksiController extends Controller
         $validator = Validator::make($request->all(), [
             'payment_option_id' => 'required',
             'status_pembayaran' => 'required',
-            // 'subtotal_produk' => 'required',
             'subtotal_pengiriman' => 'required',
-            // 'total_qty' => 'required',
-            // 'total_dpp' => 'required',
-            // 'total_ppn' => 'required',
-            // 'dpp_terutang' => 'required',
-            // 'ppn_terutang' => 'required',
-            // 'dpp_dibebaskan' => 'required',
-            // 'ppn_dibebaskan' => 'required',
             'kode_company' => 'required',
             'nomor_pembayaran' => 'required'
         ], [
             'payment_option_id.required' => 'payment option tidak boleh kosong',
             'status_pembayaran.required' => 'Status Pembayaran tidak boleh kosong',
-            // 'subtotal_produk.required' => 'Subtotal Produk tidak boleh kosong',
             'subtotal_pengiriman.required' => 'Subtotal Pengiriman tidak boleh kosong',
-            // 'total_qty.required' => 'Total Qty tidak boleh kosong',
-            // 'total_dpp.required' => 'Total DPP tidak boleh kosong',
-            // 'total_ppn.required' => 'Total PPN tidak boleh kosong',
-            // 'dpp_terutang.required' => 'DPP Terutang tidak boleh kosong',
-            // 'ppn_terutang.required' => 'PPN Terutang tidak boleh kosong',
-            // 'dpp_dibebaskan.required' => 'DPP Dibebaskan tidak boleh kosong',
-            // 'ppn_dibebaskan.required' => 'PPN Dibebaskan tidak boleh kosong',
             'kode_company.required' => 'Kode Company tidak boleh kosong',
             'nomor_pembayaran.required' => 'Nomor pembayaran tidak boleh kosong',
         ]);
@@ -239,12 +226,15 @@ class TransaksiController extends Controller
                 'transaksi.ppn_terutang',
                 'transaksi.dpp_dibebaskan',
                 'transaksi.ppn_dibebaskan',
+                'transaksi.is_paid',
                 'pesanan.user_id',
                 'pesanan.alamat_id',
                 'pesanan.kurir_id',
                 'pesanan.gudang_id',
                 'pesanan.status_pemesanan',
                 'pesanan.created_at as transaction_date',
+                'pesanan.is_confirmed',
+                'pesanan.is_delivered',
                 'users.name',
                 'alamat.jalan',
                 'alamat.jalan_ext',
@@ -331,12 +321,14 @@ class TransaksiController extends Controller
                 'transaksi.ppn_terutang',
                 'transaksi.dpp_dibebaskan',
                 'transaksi.ppn_dibebaskan',
+                'transaksi.is_paid',
                 'pesanan.user_id',
                 'pesanan.alamat_id',
                 'pesanan.kurir_id',
                 'pesanan.status_pemesanan',
                 'pesanan.gudang_id',
                 'pesanan.created_at as transaction_date',
+                'pesanan.is_confirmed',
                 'users.name',
                 'transaksi.id as transaksi_id',
                 'pesanan.id as pesanan_id',

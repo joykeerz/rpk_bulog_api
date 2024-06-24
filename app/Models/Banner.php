@@ -13,6 +13,7 @@ class Banner extends Model
         'judul_banner',
         'deskripsi_banner',
         'gambar_banner',
-        'external_banner_id'
+        'external_banner_id',
+        'berita_id'
     ];
 }

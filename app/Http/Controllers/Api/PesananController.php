@@ -142,7 +142,7 @@ class PesananController extends Controller
                 'subtotal_detail' => $inputProduct[$i]['subtotal_detail'],
             ]);
 
-            $currentStock = StokEtalase::where('id', $inputProduct[$i]['stok_etalase_id']);
+            $currentStock = StokEtalase::where('id', $inputProduct[$i]['stok_etalase_id'])->first();
             if ($currentStock->jumlah_stok == 0 || $currentStock->jumlah_stok < $inputProduct[$i]['qty']) {
                 return response()->json([
                     'error' => "Stok $currentStock->produk_id tidak mencukupi"
@@ -171,6 +171,7 @@ class PesananController extends Controller
     {
         $pesanan = Pesanan::find($id);
         $pesanan->status_pemesanan = 'diterima';
+        $pesanan->is_confirmed = true;
         $pesanan->save();
 
         $transaksi = Transaksi::where('pesanan_id', $id)->first();

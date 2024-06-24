@@ -6,9 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Biodata;
 use App\Models\Transaksi;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class PaymentOptionController extends Controller
 {
@@ -88,7 +90,13 @@ class PaymentOptionController extends Controller
             return response()->json([
                 'error' => 'Payment info not found'
             ], '404');
-        };
+        }
+
+        // Add 2 hours to the created_at timestamp
+        $payment_deadline = Carbon::parse($payment->created_at)->addHours(2)->toDateTimeString();
+
+        // Add payment_deadline to the $payment object
+        $payment->payment_deadline = $payment_deadline;
 
         return response()->json($payment, 200);
     }
