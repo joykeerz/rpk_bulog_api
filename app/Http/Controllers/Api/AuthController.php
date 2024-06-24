@@ -374,4 +374,48 @@ class AuthController extends Controller
             'data' => $customer,
         ]);
     }
+
+    public function checkPhoneNumber(Request $request)
+    {
+        $checkNumber = User::where('no_hp', $request->no_hp)->first();
+        if ($checkNumber) {
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Nomor hp sudah digunakan',
+                'isAvailable' => false,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Nomor hp tersedia',
+                'isAvailable' => true,
+            ]);
+        }
+        return response()->json([
+            'status' => 'Error',
+            'message' => 'query error',
+        ]);
+    }
+
+    public function checkKtpNumber(Request $request)
+    {
+        $checkNumber = Biodata::where('no_ktp', $request->no_ktp)->first();
+        if ($checkNumber) {
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Nomor KTP sudah digunakan',
+                'isAvailable' => false,
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'Success',
+                'message' => 'Nomor KTP tersedia',
+                'isAvailable' => true,
+            ]);
+        }
+        return response()->json([
+            'status' => 'Error',
+            'message' => 'query error',
+        ]);
+    }
 }

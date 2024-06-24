@@ -55,6 +55,8 @@ Route::middleware('auth:sanctum')->group(function () {
     ///account Route
     Route::get('/user', [AuthController::class, 'getCurrentUser']);
     Route::post('/logout', [AuthController::class, 'logout']);
+    Route::post('/check/phone', [AuthController::class, 'checkPhoneNumber']);
+    Route::post('/check/ktp', [AuthController::class, 'checkKtpNumber']);
     Route::get('/gudang/user', [GudangController::class, 'getgudangByUser']);
 
     /* wishlist route */
