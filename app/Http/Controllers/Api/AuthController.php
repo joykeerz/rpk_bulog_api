@@ -105,9 +105,24 @@ class AuthController extends Controller
             $filePathNib = $responseData['path'];
         }
 
+        $branchId = 213; // default jakarta
+        $kodeCompany = "09001"; // default jakarta
+        $companyId = 115; // default jakarta
+        $wilayahKerja = DB::table('wilayah_kerja')->where('kabupaten_id', $request->kabupaten_id)->first();
+        if ($wilayahKerja) {
+            $companyBranch = DB::table('branches')
+                ->join('companies', 'companies.id', 'branches.company_id')
+                ->select('companies.id as company_id', 'companies.kode_company', 'branches.id as branch_id')
+                ->where('company_id', $wilayahKerja->company_id)
+                ->first();
+            $branchId = $companyBranch->branch_id;
+            $kodeCompany = $companyBranch->kode_company;
+            $companyId = $companyBranch->company_id;
+        }
+
         $user = User::create([
             'id' => DB::table('users')->max('id') + 1,
-            'company_id' => 115,
+            'company_id' => $companyId,
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
@@ -157,8 +172,8 @@ class AuthController extends Controller
         $biodata->user_id = $user->id;
         $biodata->alamat_id = $alamat->id;
         $biodata->kode_customer = $request->kode_customer;
-        $biodata->branch_id = 213;
-        $biodata->kode_company = "09001";
+        $biodata->branch_id = $branchId;
+        $biodata->kode_company = $kodeCompany;
         $biodata->nama_rpk = $request->nama_rpk;
         $biodata->no_ktp = $request->no_ktp;
         $biodata->ktp_img = $filePath;

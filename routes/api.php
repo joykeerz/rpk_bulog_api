@@ -51,7 +51,7 @@ Route::get('/check/connection', function () {
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/check/phone', [AuthController::class, 'checkPhoneNumber']);
-    Route::post('/check/ktp', [AuthController::class, 'checkKtpNumber']);
+Route::post('/check/ktp', [AuthController::class, 'checkKtpNumber']);
 
 Route::middleware('auth:sanctum')->group(function () {
     ///account Route
